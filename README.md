@@ -33,6 +33,9 @@ certain problems.
 - [Problem Link](https://adventofcode.com/2020/day/5)
 - Credits: [Fefo6644](https://github.com/Fefo6644) for explaining the simple method using binary digits instead of bashing.
 
+**Day 6**: [Custom Customs](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/CustomCustoms.java)
+- [Problem Link](https://adventofcode.com/2020/day/6)
+
 ---
 
 
