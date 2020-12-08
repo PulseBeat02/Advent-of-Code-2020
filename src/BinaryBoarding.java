@@ -16,7 +16,8 @@ public class BinaryBoarding {
             list.add(line);
             line = br.readLine();
         }
-        Set<Integer> values = new HashSet<>(list.size());
+        br.close();
+        Set<Integer> values = new HashSet<>();
         for (String str : list) {
             values.add(Integer.parseInt(str.replaceAll("[BR]", "1").replaceAll("[FL]", "0"), 2));
         }

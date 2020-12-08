@@ -36,11 +36,8 @@ certain problems.
 **Day 6**: [Custom Customs](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/CustomCustoms.java)
 - [Problem Link](https://adventofcode.com/2020/day/6)
 
-**Day 7**: Handy Haversacks (Divided Into Two Parts Because of Complexity)
-- [Part One](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/HandyHaversacksPartOne.java)
-- [Part Two](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/HandyHaversacksPartTwo.java)
+**Day 7**: [Handy Haversacks](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/HandyHaversacks.java)
 - [Problem Link](https://adventofcode.com/2020/day/7)
-- Note: This problem is harder than some of the other problems and requires a good concept of recursion.
 
 ---
 

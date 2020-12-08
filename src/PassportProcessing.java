@@ -32,6 +32,7 @@ public class PassportProcessing {
             }
             line = br.readLine();
         }
+        br.close();
         System.out.println("Part One: " + countPartOne);
         System.out.println("Part Two: " + countPartTwo);
     }

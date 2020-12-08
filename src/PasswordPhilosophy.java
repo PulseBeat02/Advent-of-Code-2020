@@ -20,6 +20,7 @@ public class PasswordPhilosophy {
             passwords.add(new Password(passcode, character, min, max));
             line = br.readLine();
         }
+        br.close();
         System.out.println("Part One: " + partOne(passwords));
         System.out.println("Part Two: " + partTwo(passwords));
     }

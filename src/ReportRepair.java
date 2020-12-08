@@ -14,6 +14,7 @@ public class ReportRepair {
             list.add(Integer.parseInt(line));
             line = br.readLine();
         }
+        br.close();
         System.out.println("Part One: " + partOne(list));
         System.out.println("Part Two: " + partTwo(list));
     }

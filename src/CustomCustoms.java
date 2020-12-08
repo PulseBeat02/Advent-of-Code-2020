@@ -27,6 +27,7 @@ public class CustomCustoms {
             }
             line = br.readLine();
         }
+        br.close();
         System.out.println("Part One: " + partOneCount);
         System.out.println("Part Two: " + partTwoCount);
     }

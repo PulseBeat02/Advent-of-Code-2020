@@ -14,6 +14,7 @@ public class TobogganTrajectory {
             input.add(line);
             line = br.readLine();
         }
+        br.close();
         boolean[][] grid = new boolean[input.size()][];
         for (int r = 0; r < input.size(); r++) {
             grid[r] = new boolean[input.get(r).length()];
