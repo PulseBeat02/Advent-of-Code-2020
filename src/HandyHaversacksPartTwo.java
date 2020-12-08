@@ -7,41 +7,30 @@ public class HandyHaversacksPartTwo {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("handyhaversacks.txt"));
-        Map<Bag, Map<Bag, Integer>> bags = new HashMap<>();
+        Map<String, List<String>> bags = new HashMap<>();
         String line = br.readLine();
         Set<Character> digits = new HashSet<>(Arrays.asList('1', '2', '3', '4', '5', '6', '7', '8', '9'));
-        Bag gold = null;
         while (line != null) {
             String[] fragments = line.split(" ");
             String name = fragments[0] + " " + fragments[1];
-            Bag parent = new Bag(null, name);
-            bags.put(parent, getChildrenBags(fragments, parent, digits));
-            if (name.equals("shiny gold")) {
-                gold = parent;
-            }
+            bags.put(name, getChildrenBags(fragments, name, digits));
             line = br.readLine();
         }
-//        for (Bag key : bags.keySet()) {
-//        	System.out.println("Key: " + key.name);
-//        	System.out.println("Children: ");
-//        	for (Bag value : bags.get(key)) {
-//        		System.out.println(value.name + " ");
-//        	}
-//        	System.out.println();
-//        }
-        System.out.println("Part Two: " + calculate(bags, gold));
-    }
-
-    private static int calculate(Map<Bag, Map<Bag, Integer>> bags, Bag current) {
+        br.close();
         int count = 0;
-        for (Bag child : bags.get(current).keySet()) {
-            count += bags.get(current).get(child) * calculate(bags, child);
+        Queue<String> queue = new PriorityQueue<>(bags.get("shiny gold"));
+        while (queue.size() > 0) {
+            String p = queue.poll();
+            for (int i = 0; i < bags.get(p).size(); i++) {
+                queue.add(bags.get(p).get(i));
+            }
+            count++;
         }
-        return count;
+        System.out.println("Part Two: " + count);
     }
 
-    private static Map<Bag, Integer> getChildrenBags(String[] fragments, Bag parent, Set<Character> digits) {
-        Map<Bag, Integer> childrenBags = new HashMap<>();
+    private static List<String> getChildrenBags(String[] fragments, String parent, Set<Character> digits) {
+        List<String> childrenBags = new ArrayList<>();
         for (String str : fragments) {
             if (str.equals("no")) {
                 return childrenBags;
@@ -55,31 +44,12 @@ public class HandyHaversacksPartTwo {
                 }
                 String childrenName = fragments[i + 1] + " " + last;
                 int count = Integer.parseInt(fragments[i]);
-                childrenBags.put(new Bag(parent, childrenName), count);
+                for (int j = 0; j < count; j++) {
+                    childrenBags.add(childrenName);
+                }
             }
         }
         return childrenBags;
     }
 
-    public static class Bag implements Comparable<Bag> {
-        public final Bag parent;
-        public final String name;
-        public boolean marked;
-        public Bag(Bag parent, String name) {
-            this.parent = parent;
-            this.name = name;
-        }
-        @Override
-        public int compareTo(Bag o) {
-            return this.name.compareTo(o.name);
-        }
-        @Override
-        public boolean equals(Object other) {
-            if (other instanceof Bag) {
-                return name.equals(((Bag) other).name);
-            } else {
-                return false;
-            }
-        }
-    }
 }
