@@ -37,7 +37,10 @@ certain problems.
 - [Problem Link](https://adventofcode.com/2020/day/6)
 
 **Day 7**: [Handy Haversacks](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/HandyHaversacks.java)
-- [Problem Link](https://adventofcode.com/2020/day/7)
+- [Problem Link](https://adventofcode.com/2020/day/7
+
+**Day 8**: [Handheld Halting](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/HandheldHalting.java)
+- [Problem Link](https://adventofcode.com/2020/day/8)
 
 ---
 
