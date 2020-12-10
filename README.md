@@ -42,6 +42,9 @@ certain problems.
 **Day 8**: [Handheld Halting](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/HandheldHalting.java)
 - [Problem Link](https://adventofcode.com/2020/day/8)
 
+**Day 9**: [Encoding Error](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/EncodingError.java)
+- [Problem Link](https://adventofcode.com/2020/day/9)
+
 ---
 
 
