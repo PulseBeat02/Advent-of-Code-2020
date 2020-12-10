@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class EncodingError {
@@ -57,13 +58,12 @@ public class EncodingError {
         return -1;
     }
 
+    // Uses Hashing for an O(N) Algorithm
     public static boolean checkValidity(List<Long> list, int index, int preamble) {
+        HashSet<Long> values = new HashSet<>();
         for (int i = index - preamble; i < index; i++) {
-            for (int j = i + 1; j < index; j++) {
-                if (list.get(i) + list.get(j) == list.get(index)) {
-                    return true;
-                }
-            }
+            if (values.contains(list.get(index) - list.get(i))) return true;
+            values.add(list.get(i));
         }
         return false;
     }

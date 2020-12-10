@@ -35,12 +35,16 @@ public class HandheldHalting {
             String operation = boot.get(recurse).key;
             int number = boot.get(recurse).value;
             switch (operation) {
-                case "acc" -> {
+                case "acc":
                     count += number;
                     recurse++;
-                }
-                case "jmp" -> recurse += number;
-                case "nop" -> recurse++;
+                    break;
+                case "jmp":
+                    recurse += number;
+                    break;
+                case "nop":
+                    recurse++;
+                    break;
             }
         }
         return count;
