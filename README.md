@@ -45,6 +45,9 @@ certain problems.
 **Day 9**: [Encoding Error](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/EncodingError.java)
 - [Problem Link](https://adventofcode.com/2020/day/9)
 
+**Day 10**: [Adapter Array](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/AdapterArray.java)
+- [Problem Link](https://adventofcode.com/2020/day/10)
+
 ---
 
 
