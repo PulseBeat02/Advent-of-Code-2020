@@ -48,6 +48,9 @@ certain problems.
 **Day 10**: [Adapter Array](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/AdapterArray.java)
 - [Problem Link](https://adventofcode.com/2020/day/10)
 
+**Day 11**: [Seating System](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/SeatingSystem.java)
+- [Problem Link](https://adventofcode.com/2020/day/11)
+
 ---
 
 
