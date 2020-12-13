@@ -51,6 +51,9 @@ certain problems.
 **Day 11**: [Seating System](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/SeatingSystem.java)
 - [Problem Link](https://adventofcode.com/2020/day/11)
 
+**Day 12**: [Seating System](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/RainRisk.java)
+- [Problem Link](https://adventofcode.com/2020/day/12)
+
 ---
 
 
