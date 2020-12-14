@@ -54,6 +54,9 @@ certain problems.
 **Day 12**: [Seating System](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/RainRisk.java)
 - [Problem Link](https://adventofcode.com/2020/day/12)
 
+**Day 13**: [Shuttle Search](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/ShuttleSearch.java)
+- [Problem Link](https://adventofcode.com/2020/day/13)
+
 ---
 
 
