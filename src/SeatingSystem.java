@@ -154,7 +154,12 @@ public class SeatingSystem {
     public static List<char[]> deepCopy(List<char[]> other) {
         List<char[]> newList = new ArrayList<>();
         for (char[] arr : other) {
-            newList.add(Arrays.copyOf(arr, arr.length));
+            char[] characterArray = new char[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                characterArray[i] = arr[i];
+            }
+            newList.add(characterArray);
+//            newList.add(Arrays.copyOf(arr, arr.length));
         }
         return newList;
     }
@@ -165,8 +170,10 @@ public class SeatingSystem {
 
     public static boolean detectChange(List<char[]> before, List<char[]> after) {
         for (int i = 0; i < before.size(); i++) {
-            if (!Arrays.equals(before.get(i), after.get(i))) {
-                return true;
+            for (int j = 0; j < before.get(i).length; j++) {
+                if (before.get(i)[j] != after.get(i)[j]) {
+                    return true;
+                }
             }
         }
         return false;

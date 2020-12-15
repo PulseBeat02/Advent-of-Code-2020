@@ -57,6 +57,9 @@ certain problems.
 **Day 13**: [Shuttle Search](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/ShuttleSearch.java)
 - [Problem Link](https://adventofcode.com/2020/day/13)
 
+**Day 14**: [Docking Data](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/DockingData.java)
+- [Problem Link](https://adventofcode.com/2020/day/14)
+
 ---
 
 
