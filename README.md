@@ -2,6 +2,29 @@
 
 ---
 
+## Links to Code Solutions
+
+| **Day** | **Name**                | **Problem Link**                     | **Brandon Li's Java Solution Code**                                                            | **Additional Notes**                                                                                                       |
+|---------|-------------------------|--------------------------------------|------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| #1      | Report Repair           | https://adventofcode.com/2020/day/1  | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/ReportRepair.java           |                                                                                                                            |
+| #2      | Password Philosophy     | https://adventofcode.com/2020/day/2  | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/PasswordPhilosophy.java     |                                                                                                                            |
+| #3      | Toboggan Trajectory     | https://adventofcode.com/2020/day/3  | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/TobogganTrajectory.java     |                                                                                                                            |
+| #4      | Passport Processing     | https://adventofcode.com/2020/day/4  | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/PassportProcessing.java     |                                                                                                                            |
+| #5      | Binary Boarding         | https://adventofcode.com/2020/day/5  | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/BinaryBoarding.java         | Credits:  [Fefo6644](https://github.com/Fefo6644) for explaining the simple method using binary digits instead of bashing. |
+| #6      | Custom Customs          | https://adventofcode.com/2020/day/6  | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/CustomCustoms.java          |                                                                                                                            |
+| #7      | Handy Haversacks        | https://adventofcode.com/2020/day/7  | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/HandyHaversacks.java        |                                                                                                                            |
+| #8      | Handheld Halting        | https://adventofcode.com/2020/day/8  | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/HandheldHalting.java        |                                                                                                                            |
+| #9      | Encoding Error          | https://adventofcode.com/2020/day/9  | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/EncodingError.java          |                                                                                                                            |
+| #10     | Adapter Array           | https://adventofcode.com/2020/day/10 | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/AdapterArray.java           |                                                                                                                            |
+| #11     | Seating System          | https://adventofcode.com/2020/day/11 | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/SeatingSystem.java          |                                                                                                                            |
+| #12     | Rain Risk               | https://adventofcode.com/2020/day/12 | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/RainRisk.java               |                                                                                                                            |
+| #13     | Shuttle Search          | https://adventofcode.com/2020/day/13 | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/ShuttleSearch.java          |                                                                                                                            |
+| #14     | Docking Data            | https://adventofcode.com/2020/day/14 | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/DockingData.java            |                                                                                                                            |
+| #15     | Rambunctious Recitation | https://adventofcode.com/2020/day/15 | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/RambunctiousRecitation.java |                                                                                                                            |
+| #16     | Ticket Translation      | https://adventofcode.com/2020/day/16 | https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/TicketTranslation.java      |                                                                                                                            |
+
+---
+
 ### What is the Advent of Code?
 Advent of Code is an annual coding contest where users are given a large input and required
 to perform multiple operations in order to get a desired result. These operations usually
@@ -14,57 +37,6 @@ clear for users to look at. The parent folder has multiple text files containing
 certain problems.
 
 ---
-
-## Links to Code Solutions
-
-**Day 1**: [Report Repair](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/ReportRepair.java)
-- [Problem Link](https://adventofcode.com/2020/day/1)
-
-**Day 2**: [Password Philosophy](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/PasswordPhilosophy.java)
-- [Problem Link](https://adventofcode.com/2020/day/2)
-
-**Day 3**: [Toboggan Trajectory](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/TobogganTrajectory.java)
-- [Problem Link](https://adventofcode.com/2020/day/3)
-
-**Day 4**: [Passport Processing](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/PassportProcessing.java)
-- [Problem Link](https://adventofcode.com/2020/day/4)
-
-**Day 5**: [Binary Boarding](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/BinaryBoarding.java)
-- [Problem Link](https://adventofcode.com/2020/day/5)
-- Credits: [Fefo6644](https://github.com/Fefo6644) for explaining the simple method using binary digits instead of bashing.
-
-**Day 6**: [Custom Customs](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/CustomCustoms.java)
-- [Problem Link](https://adventofcode.com/2020/day/6)
-
-**Day 7**: [Handy Haversacks](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/HandyHaversacks.java)
-- [Problem Link](https://adventofcode.com/2020/day/7)
-
-**Day 8**: [Handheld Halting](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/HandheldHalting.java)
-- [Problem Link](https://adventofcode.com/2020/day/8)
-
-**Day 9**: [Encoding Error](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/EncodingError.java)
-- [Problem Link](https://adventofcode.com/2020/day/9)
-
-**Day 10**: [Adapter Array](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/AdapterArray.java)
-- [Problem Link](https://adventofcode.com/2020/day/10)
-
-**Day 11**: [Seating System](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/SeatingSystem.java)
-- [Problem Link](https://adventofcode.com/2020/day/11)
-
-**Day 12**: [Seating System](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/RainRisk.java)
-- [Problem Link](https://adventofcode.com/2020/day/12)
-
-**Day 13**: [Shuttle Search](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/ShuttleSearch.java)
-- [Problem Link](https://adventofcode.com/2020/day/13)
-
-**Day 14**: [Docking Data](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/DockingData.java)
-- [Problem Link](https://adventofcode.com/2020/day/14)
-
-**Day 15**: [Rambunctious Recitation](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/RambunctiousRecitation.java)
-- [Problem Link](https://adventofcode.com/2020/day/15)
-
----
-
 
 
 
