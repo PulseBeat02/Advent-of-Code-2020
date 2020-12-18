@@ -2,25 +2,24 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ConwayCubes {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("conwaycubes.txt"));
-        List<String> lines = new ArrayList<>();
+        List<String> input = new ArrayList<>();
         String line = br.readLine();
         while (line != null) {
-            lines.add(line);
+            input.add(line);
             line = br.readLine();
         }
         br.close();
-        System.out.println("Part One: " + partOne(lines, 6));
+        System.out.println("Part One: " + partOne(input));
     }
 
-    public static int partOne(List<String> lines, int loops) {
-        int length = lines.size() + loops * 2;
+    public static int partOne(List<String> lines) {
+        int length = lines.size() + 6 * 2;
         Cube[][][] grid = new Cube[length][length][length];
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
@@ -29,9 +28,9 @@ public class ConwayCubes {
                 }
             }
         }
-        int j = loops;
+        int j = 6;
         for (String line : lines) {
-            int k = loops;
+            int k = 6;
             for (char c : line.toCharArray()) {
                 int i = grid.length / 2 + 1;
                 grid[i][j][k] = new Cube(new Coordinate(i, j, k), c == '#');
@@ -39,7 +38,7 @@ public class ConwayCubes {
             }
             j++;
         }
-        for (int i = 0; i < loops; i++) {
+        for (int i = 0; i < 6; i++) {
             grid = performChange(grid);
         }
         int count = 0;
@@ -56,17 +55,20 @@ public class ConwayCubes {
     }
 
     public static Cube[][][] performChange(Cube[][][] grid) {
-        Cube[][][] updated = Arrays.copyOf(grid, grid.length);
+        Cube[][][] updated = new Cube[grid.length][grid[0].length][grid[0][0].length];
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 for (int k = 0; k < grid[i][j].length; k++) {
                     Cube target = grid[i][j][k];
                     int count = getNeigborCountActive(grid, target);
                     if (target.active && (count < 2 || count > 3)) {
-                        updated[i][j][k].active = false;
+                        updated[i][j][k] = new Cube(new Coordinate(i, j, k), false);
+                        continue;
                     } else if (!target.active && count == 3) {
-                        updated[i][j][k].active = true;
+                        updated[i][j][k] = new Cube(new Coordinate(i, j, k), true);
+                        continue;
                     }
+                    updated[i][j][k] = grid[i][j][k];
                 }
             }
         }
