@@ -1,6 +1,9 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +35,7 @@ public class CustomCustoms {
         System.out.println("Part Two: " + partTwoCount);
     }
 
-    public static int getCountPartOne(String str) {
+    private static int getCountPartOne(String str) {
         Set<Character> chars = new HashSet<>();
         for (char c : str.toCharArray()) {
             chars.add(c);
@@ -41,17 +44,15 @@ public class CustomCustoms {
         return chars.size();
     }
 
-    public static int getCountPartTwo(String str) {
+    private static int getCountPartTwo(String str) {
         String[] array = str.split(" ");
         boolean[] primary = new boolean[26];
-        for (int i = 0; i < primary.length; i++) {
-            primary[i] = true;
-        }
-        for (int i = 0; i < array.length; i++) {
+        Arrays.fill(primary, true);
+        for (String s : array) {
             boolean[] inner = new boolean[26];
-            for (int j = 0; j < array[i].length(); j++) {
-                if (primary[array[i].charAt(j) - 'a']) {
-                    inner[array[i].charAt(j) - 'a'] = true;
+            for (int j = 0; j < s.length(); j++) {
+                if (primary[s.charAt(j) - 'a']) {
+                    inner[s.charAt(j) - 'a'] = true;
                 }
             }
             copyArray(primary, inner);
@@ -65,10 +66,8 @@ public class CustomCustoms {
         return count;
     }
 
-    public static void copyArray(boolean[] dest, boolean[] array) {
-        for (int i = 0; i < dest.length; i++) {
-            dest[i] = array[i];
-        }
+    private static void copyArray(boolean[] dest, boolean[] array) {
+        System.arraycopy(array, 0, dest, 0, dest.length);
     }
 
 

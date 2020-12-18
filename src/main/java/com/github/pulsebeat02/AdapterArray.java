@@ -1,11 +1,17 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AdapterArray {
 
-    public static Map<Integer, Long> counts = new HashMap<>();
+    private static final Map<Integer, Long> counts = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("adapterarray.txt"));
@@ -21,7 +27,7 @@ public class AdapterArray {
         System.out.println("Part Two: " + partTwo(list, 0));
     }
 
-    public static int partOne(List<Integer> list) {
+    private static int partOne(List<Integer> list) {
         int one = 0;
         int three = 1;
         for (int i = 0; i < list.size() - 1; i++) {
@@ -35,7 +41,7 @@ public class AdapterArray {
         return one * three;
     }
 
-    public static long partTwo(List<Integer> list, int i) {
+    private static long partTwo(List<Integer> list, int i) {
         if (i == list.size() - 1) {
             return 1;
         }

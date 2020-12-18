@@ -1,3 +1,5 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,13 +22,13 @@ public class RambunctiousRecitation {
         System.out.println("Part Two: " + calculateOutput(nums, 30000000));
     }
 
-    public static int calculateOutput(List<Integer> nums, int number) {
+    private static int calculateOutput(List<Integer> nums, int number) {
         Map<Integer, Integer> spoken = new HashMap<>();
         for (int i = 0; i < nums.size() - 1; i++) {
             spoken.put(nums.get(i), i);
         }
         int last = nums.get(nums.size() - 1);
-        for (int nextIndex = spoken.size(); nextIndex < number - 1; nextIndex++){
+        for (int nextIndex = spoken.size(); nextIndex < number - 1; nextIndex++) {
             int recent = spoken.containsKey(last) ? nextIndex - spoken.get(last) : 0;
             spoken.put(last, nextIndex);
             last = recent;

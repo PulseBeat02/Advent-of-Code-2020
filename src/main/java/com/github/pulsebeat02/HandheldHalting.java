@@ -1,3 +1,5 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -94,10 +96,9 @@ public class HandheldHalting {
         return accumulator;
     }
 
-
     private static class Pair<K, V> {
-        public final K key;
-        public final V value;
+        private final K key;
+        private final V value;
 
         public Pair(K key, V value) {
             this.key = key;

@@ -1,3 +1,5 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -37,11 +39,11 @@ public class PassportProcessing {
         System.out.println("Part Two: " + countPartTwo);
     }
 
-    public static void partOneCheck(List<String> requirements, String passport) {
+    private static void partOneCheck(List<String> requirements, String passport) {
         String[] elements = passport.split(" ");
         boolean successful = true;
         for (String requirement : requirements) {
-            if (!contains(elements, requirement)) {
+            if (contains(elements, requirement)) {
                 successful = false;
                 break;
             }
@@ -49,11 +51,11 @@ public class PassportProcessing {
         countPartOne += successful ? 1 : 0;
     }
 
-    public static void partTwoCheck(List<String> requirements, String passport) {
+    private static void partTwoCheck(List<String> requirements, String passport) {
         String[] elements = passport.split(" ");
         boolean successful = true;
         for (String requirement : requirements) {
-            if (!contains(elements, requirement)) {
+            if (contains(elements, requirement)) {
                 successful = false;
                 break;
             }
@@ -67,7 +69,7 @@ public class PassportProcessing {
         countPartTwo += successful ? 1 : 0;
     }
 
-    public static boolean contains(String[] array, String desired) {
+    private static boolean contains(String[] array, String desired) {
         for (String str : array) {
             if (str.substring(0, 3).equals(desired)) {
                 return true;
@@ -76,7 +78,7 @@ public class PassportProcessing {
         return false;
     }
 
-    public static boolean matches(String mapping, String desired) {
+    private static boolean matches(String mapping, String desired) {
         String value = mapping.substring(4);
         Set<Character> digits = new HashSet<>(Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'));
         switch (desired) {
@@ -94,7 +96,7 @@ public class PassportProcessing {
                     return false;
                 }
                 int height = Integer.parseInt(value.substring(0, value.length() - 2));
-                if (value.substring(value.length() - 2).equals("cm")) {
+                if (value.endsWith("cm")) {
                     return height >= 150 && height <= 193;
                 } else {
                     return height >= 59 && height <= 76;
@@ -119,7 +121,7 @@ public class PassportProcessing {
                 }
                 return true;
             case "ecl":
-                return new HashSet<String>(Arrays.asList("amb", "blu", "brn", "gry", "grn", "hzl", "oth")).contains(value);
+                return Arrays.asList("amb", "blu", "brn", "gry", "grn", "hzl", "oth").contains(value);
             case "pid":
                 for (char c : value.toCharArray()) {
                     if (!digits.contains(c)) {
@@ -132,10 +134,6 @@ public class PassportProcessing {
             default:
                 return false;
         }
-    }
-
-    public static boolean isNumeric(String str) {
-        return str.matches("-?\\d+(\\.\\d+)?");
     }
 
 }

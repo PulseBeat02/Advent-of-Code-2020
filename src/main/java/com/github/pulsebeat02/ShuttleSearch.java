@@ -1,8 +1,9 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ShuttleSearch {
@@ -20,7 +21,7 @@ public class ShuttleSearch {
         System.out.println("Part Two: " + partTwo(buses));
     }
 
-    public static long partTwo(List<Integer> buses) {
+    private static long partTwo(List<Integer> buses) {
 
         /*
          * Good Explanation Here: https://www.youtube.com/watch?v=zIFehsBHB8o
@@ -38,11 +39,7 @@ public class ShuttleSearch {
         }
 
         // Clear -1
-        for (Iterator<Integer> iter = buses.iterator(); iter.hasNext();) {
-            if (iter.next() == -1) {
-                iter.remove();
-            }
-        }
+        buses.removeIf(integer -> integer == -1);
 
         // Calculate N
         long N = 1;
@@ -52,8 +49,8 @@ public class ShuttleSearch {
 
         // Calculate Ni
         List<Long> Ni = new ArrayList<>();
-        for (int i = 0; i < buses.size(); i++) {
-            Ni.add(N/buses.get(i));
+        for (int bus : buses) {
+            Ni.add(N / bus);
         }
 
         // Calculate xi
@@ -84,7 +81,7 @@ public class ShuttleSearch {
 
     }
 
-    public static int partOne(List<Integer> buses, int earliest) {
+    private static int partOne(List<Integer> buses, int earliest) {
         int min = Integer.MAX_VALUE;
         int busType = -1;
         for (int bus : buses) {

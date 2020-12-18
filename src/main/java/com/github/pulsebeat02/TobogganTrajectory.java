@@ -1,3 +1,5 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -26,7 +28,7 @@ public class TobogganTrajectory {
         System.out.println("Part Two: " + getTreeCount(grid, 1, 1) * getTreeCount(grid, 3, 1) * getTreeCount(grid, 5, 1) * getTreeCount(grid, 7, 1) * getTreeCount(grid, 1, 2));
     }
 
-    public static int getTreeCount(boolean[][] grid, int x, int y) {
+    private static int getTreeCount(boolean[][] grid, int x, int y) {
         int trees = 0;
         for (int r = 0, c = 0; r < grid.length; r += y, c += x) {
             trees += grid[r][c % grid[r].length] ? 1 : 0;

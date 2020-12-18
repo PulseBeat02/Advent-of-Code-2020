@@ -1,7 +1,12 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class EncodingError {
 
@@ -19,13 +24,11 @@ public class EncodingError {
             line = br.readLine();
         }
         br.close();
-        System.out.println("Part One: " + calculatePartOne(list, 25));
-        System.out.println("Part Two: " + getContiguousSet(list, prefixSum, calculatePartOne(list, 25)));
+        System.out.println("Part One: " + calculatePartOne(list));
+        System.out.println("Part Two: " + getContiguousSet(list, prefixSum, calculatePartOne(list)));
     }
 
-    public static long getContiguousSet(List<Long> list, List<Long> prefixSum, long target) {
-        Set<Long> values = new HashSet<>();
-
+    private static long getContiguousSet(List<Long> list, List<Long> prefixSum, long target) {
         for (int i = 0; i < prefixSum.size(); i++) {
             for (int j = 1; j < prefixSum.size(); j++) {
                 long begin = prefixSum.get(i);
@@ -47,9 +50,9 @@ public class EncodingError {
         return -1;
     }
 
-    public static long calculatePartOne(List<Long> list, int preamble) {
-        for (int i = preamble; i < list.size(); i++) {
-            if (!checkValidity(list, i, preamble)) {
+    private static long calculatePartOne(List<Long> list) {
+        for (int i = 25; i < list.size(); i++) {
+            if (!checkValidity(list, i)) {
                 return list.get(i);
             }
         }
@@ -57,9 +60,9 @@ public class EncodingError {
     }
 
     // Uses Hashing for an O(N) Algorithm
-    public static boolean checkValidity(List<Long> list, int index, int preamble) {
+    private static boolean checkValidity(List<Long> list, int index) {
         Set<Long> values = new HashSet<>();
-        for (int i = index - preamble; i < index; i++) {
+        for (int i = index - 25; i < index; i++) {
             if (values.contains(list.get(index) - list.get(i))) {
                 return true;
             }

@@ -1,3 +1,5 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,7 +21,7 @@ public class ReportRepair {
         System.out.println("Part Two: " + partTwo(list));
     }
 
-    public static int partOne(List<Integer> list) {
+    private static int partOne(List<Integer> list) {
         int result = 0;
         for (int i = 0; i < list.size(); i++) {
             for (int j = i + 1; j < list.size(); j++) {
@@ -34,7 +36,7 @@ public class ReportRepair {
         return result;
     }
 
-    public static int partTwo(List<Integer> list) {
+    private static int partTwo(List<Integer> list) {
         int result = 0;
         for (int i = 0; i < list.size(); i++) {
             for (int j = i + 1; j < list.size(); j++) {

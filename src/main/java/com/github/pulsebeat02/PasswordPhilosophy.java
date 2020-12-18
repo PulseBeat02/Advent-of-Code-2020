@@ -1,3 +1,5 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -25,7 +27,7 @@ public class PasswordPhilosophy {
         System.out.println("Part Two: " + partTwo(passwords));
     }
 
-    public static int partOne(List<Password> passwords) {
+    private static int partOne(List<Password> passwords) {
         int result = 0;
         for (Password pass : passwords) {
             String passcode = pass.passcode;
@@ -42,7 +44,7 @@ public class PasswordPhilosophy {
         return result;
     }
 
-    public static int partTwo(List<Password> passwords) {
+    private static int partTwo(List<Password> passwords) {
         int result = 0;
         for (Password pass : passwords) {
             String passcode = pass.passcode;
@@ -55,11 +57,12 @@ public class PasswordPhilosophy {
         return result;
     }
 
-    public static class Password {
+    private static class Password {
         private final String passcode;
         private final char c;
         private final int min;
         private final int max;
+
         public Password(String passcode, char c, int min, int max) {
             this.passcode = passcode;
             this.c = c;

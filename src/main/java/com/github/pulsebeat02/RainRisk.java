@@ -1,3 +1,5 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -6,9 +8,9 @@ import java.util.List;
 
 public class RainRisk {
 
-    public static int x = 0;
-    public static int y = 0;
-    public static int angle = 0;
+    private static int x = 0;
+    private static int y = 0;
+    private static int angle = 0;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("rainrisk.txt"));
@@ -17,7 +19,7 @@ public class RainRisk {
         while (line != null) {
             char dir = line.substring(0, 1).charAt(0);
             int value = Integer.parseInt(line.substring(1));
-            translations.add(new Pair(dir, value));
+            translations.add(new Pair<>(dir, value));
             line = br.readLine();
         }
         br.close();
@@ -28,7 +30,7 @@ public class RainRisk {
         System.out.println("Part Two: " + partTwo(translations));
     }
 
-    public static int partOne(List<Pair<Character, Integer>> translations) {
+    private static int partOne(List<Pair<Character, Integer>> translations) {
         for (Pair<Character, Integer> translation : translations) {
             int value = translation.value;
             switch (translation.key) {
@@ -58,7 +60,7 @@ public class RainRisk {
         return Math.abs(x) + Math.abs(y);
     }
 
-    public static int partTwo(List<Pair<Character, Integer>> translations) {
+    private static int partTwo(List<Pair<Character, Integer>> translations) {
         int wayX = 10;
         int wayY = 1;
         for (Pair<Character, Integer> translation : translations) {
@@ -105,11 +107,11 @@ public class RainRisk {
         return Math.abs(x) + Math.abs(y);
     }
 
-    public static int[] rotatePoint(int x, int y, boolean clockwise) {
+    private static int[] rotatePoint(int x, int y, boolean clockwise) {
         return clockwise ? new int[]{y, -x} : new int[]{-y, x};
     }
 
-    public static void getDirection(int value) {
+    private static void getDirection(int value) {
         switch (Math.abs(angle) % 360) {
             case 0:
                 x -= value;
@@ -126,7 +128,7 @@ public class RainRisk {
         }
     }
 
-    public static class Pair<T, V> {
+    private static class Pair<T, V> {
         private final T key;
         private final V value;
 

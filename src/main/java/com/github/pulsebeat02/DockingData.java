@@ -1,16 +1,18 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DockingData {
 
-    public static long[] partOneIndexes;
-    public static Map<String, Integer> partTwoIndexes;
+    private static long[] partOneIndexes;
+    private static Map<String, Integer> partTwoIndexes;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("dockingdata.txt"));
@@ -44,7 +46,7 @@ public class DockingData {
         System.out.println("Part Two: " + partTwoSum);
     }
 
-    public static void partOne(String mask, String line) {
+    private static void partOne(String mask, String line) {
         int index = Integer.parseInt(line.substring(line.indexOf('[') + 1, line.indexOf(']')));
         long value = Long.parseLong(line.substring(line.indexOf('=') + 2));
         for (int i = mask.length() - 1; i >= 0; i--) {
@@ -59,7 +61,7 @@ public class DockingData {
         partOneIndexes[index] = value;
     }
 
-    public static void partTwo(String mask, String line) {
+    private static void partTwo(String mask, String line) {
         String address = line.substring(4, line.indexOf("]"));
         String num = line.substring(line.indexOf("=") + 2);
         List<String> addresses = decodeAddresses(address, mask);
@@ -73,7 +75,7 @@ public class DockingData {
     }
 
     private static List<String> decodeAddresses(String address, String mask) {
-        List<String> ret = new ArrayList<>(Arrays.asList(""));
+        List<String> ret = new ArrayList<>(Collections.singletonList(""));
         String binary = getBinaryPaddedString(address);
         for (int i = 0; i < mask.length(); i++) {
             switch (mask.charAt(i)) {
@@ -100,8 +102,7 @@ public class DockingData {
         return ret;
     }
 
-
-    public static String getBinaryPaddedString(String str) {
+    private static String getBinaryPaddedString(String str) {
         StringBuilder sb = new StringBuilder(Integer.toBinaryString(Integer.parseInt(str)));
         while (sb.length() != 36) {
             sb.insert(0, '0');

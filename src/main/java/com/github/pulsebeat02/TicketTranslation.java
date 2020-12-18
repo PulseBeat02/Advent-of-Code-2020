@@ -1,3 +1,5 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,7 +11,7 @@ import java.util.Map;
 
 public class TicketTranslation {
 
-    public static List<List<Integer>> nearbyTickets;
+    private static List<List<Integer>> nearbyTickets;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("tickettranslation.txt"));
@@ -53,11 +55,12 @@ public class TicketTranslation {
         System.out.println("Part Two: " + partTwo(props, myTickets));
     }
 
-    public static int partOne(Map<String, List<Range>> props) {
+    private static int partOne(Map<String, List<Range>> props) {
         int sum = 0;
-        for (int i = 0; i < nearbyTickets.size(); i++) {
-            outer: for (int j = 0; j < nearbyTickets.get(i).size(); j++) {
-                int query = nearbyTickets.get(i).get(j);
+        for (List<Integer> nearbyTicket : nearbyTickets) {
+            outer:
+            for (int j = 0; j < nearbyTicket.size(); j++) {
+                int query = nearbyTicket.get(j);
                 for (List<Range> ranges : props.values()) {
                     for (Range range : ranges) {
                         if (valid(range, query)) {
@@ -66,17 +69,17 @@ public class TicketTranslation {
                     }
                 }
                 sum += query;
-                nearbyTickets.get(i).set(j, -1);
+                nearbyTicket.set(j, -1);
             }
         }
         return sum;
     }
 
-    public static boolean valid(Range range, int query) {
+    private static boolean valid(Range range, int query) {
         return query >= range.min && query <= range.max;
     }
 
-    public static long partTwo(Map<String, List<Range>> props, List<Integer> tickets) {
+    private static long partTwo(Map<String, List<Range>> props, List<Integer> tickets) {
         List<String> fieldsIdentified = new ArrayList<>();
         List<List<String>> possibleFields = getPossibleFields(props, tickets);
         while (fieldsIdentified.size() != possibleFields.size()) {
@@ -106,12 +109,12 @@ public class TicketTranslation {
         return product;
     }
 
-    public static List<List<String>> getPossibleFields(Map<String, List<Range>> props, List<Integer> tickets) {
+    private static List<List<String>> getPossibleFields(Map<String, List<Range>> props, List<Integer> tickets) {
         List<List<String>> indexes = new ArrayList<>();
         for (int i = 0; i < tickets.size(); i++) {
             List<Integer> column = new ArrayList<>();
-            for (int j = 0; j < nearbyTickets.size(); j++) {
-                int num = nearbyTickets.get(j).get(i);
+            for (List<Integer> nearbyTicket : nearbyTickets) {
+                int num = nearbyTicket.get(i);
                 if (num != -1) {
                     column.add(num);
                 }
@@ -121,15 +124,14 @@ public class TicketTranslation {
         return indexes;
     }
 
-    public static List<String> getMatchingFields(Map<String, List<Range>> props, List<Integer> column) {
+    private static List<String> getMatchingFields(Map<String, List<Range>> props, List<Integer> column) {
         List<String> matches = new ArrayList<>();
         for (String key : props.keySet()) {
             List<Range> ranges = props.get(key);
             Range first = ranges.get(0);
             Range second = ranges.get(1);
             boolean possible = true;
-            for (int i = 0; i < column.size(); i++) {
-                int num = column.get(i);
+            for (int num : column) {
                 if (!((first.min <= num && num <= first.max) || (second.min <= num && num <= second.max))) {
                     possible = false;
                     break;
@@ -142,11 +144,11 @@ public class TicketTranslation {
         return matches;
     }
 
-    public static class Range {
-        public final int min;
-        public final int max;
+    private static class Range {
+        private final int min;
+        private final int max;
 
-        public Range(int minimum, int maximum) {
+        private Range(int minimum, int maximum) {
             this.min = minimum;
             this.max = maximum;
         }

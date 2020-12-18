@@ -1,13 +1,14 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SeatingSystem {
 
-    public static List<char[]> reference;
+    private static List<char[]> reference;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("seatingsystem.txt"));
@@ -22,7 +23,7 @@ public class SeatingSystem {
         System.out.println("Part Two: " + partTwo());
     }
 
-    public static int partOne() {
+    private static int partOne() {
         List<char[]> changed = deepCopy(reference);
         List<char[]> seats = deepCopy(changed);
         do {
@@ -32,7 +33,7 @@ public class SeatingSystem {
         return getOccupiedCount(changed);
     }
 
-    public static List<char[]> applyChangePartOne(List<char[]> list) {
+    private static List<char[]> applyChangePartOne(List<char[]> list) {
         List<char[]> newList = deepCopy(list);
         for (int i = 0; i < list.size(); i++) {
             for (int j = 0; j < list.get(i).length; j++) {
@@ -53,7 +54,7 @@ public class SeatingSystem {
         return newList;
     }
 
-    public static int getAdjacentOccupiedSeats(List<char[]> list, int i, int j) {
+    private static int getAdjacentOccupiedSeats(List<char[]> list, int i, int j) {
         int count = 0;
         for (Directional dir : Directional.values()) {
             int newX = i + dir.x;
@@ -65,24 +66,11 @@ public class SeatingSystem {
         return count;
     }
 
-    public static boolean checkInBounds(int i, int j) {
+    private static boolean checkInBounds(int i, int j) {
         return i >= 0 && i < reference.size() && j >= 0 && j < reference.get(0).length;
     }
 
-    private enum Directional {
-        UP(-1, 0), DOWN(1, 0), LEFT(0, -1), RIGHT(0, 1), UP_RIGHT(-1, 1), UP_LEFT(-1, -1), DOWN_RIGHT(1, 1),
-        DOWN_LEFT(1, -1);
-
-        final int x;
-        final int y;
-
-        private Directional(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    public static int partTwo() {
+    private static int partTwo() {
         List<char[]> changed = deepCopy(reference);
         List<char[]> seats = deepCopy(changed);
         do {
@@ -92,7 +80,7 @@ public class SeatingSystem {
         return getOccupiedCount(changed);
     }
 
-    public static List<char[]> applyChangePartTwo(List<char[]> list) {
+    private static List<char[]> applyChangePartTwo(List<char[]> list) {
         List<char[]> newList = deepCopy(list);
         for (int i = 0; i < list.size(); i++) {
             for (int j = 0; j < list.get(i).length; j++) {
@@ -113,15 +101,16 @@ public class SeatingSystem {
         return newList;
     }
 
-    public static int getViewedSeats(List<char[]> list, int x, int y, char c) {
-        boolean empty = c == 'L' ? true : false;
+    private static int getViewedSeats(List<char[]> list, int x, int y, char c) {
+        boolean empty = c == 'L';
         int count = 0;
-        outer: for (Directional dir : Directional.values()) {
+        outer:
+        for (Directional dir : Directional.values()) {
             int i = x + dir.x;
             int j = y + dir.y;
             while (checkInBounds(i, j)) {
                 char fill = getCharacterIndex(list, i, j);
-                i +=  dir.x;
+                i += dir.x;
                 j += dir.y;
                 switch (fill) {
                     case '#':
@@ -141,7 +130,7 @@ public class SeatingSystem {
         return count;
     }
 
-    public static int getOccupiedCount(List<char[]> list) {
+    private static int getOccupiedCount(List<char[]> list) {
         int count = 0;
         for (int i = 0; i < list.size(); i++) {
             for (int j = 0; j < list.get(i).length; j++) {
@@ -151,24 +140,21 @@ public class SeatingSystem {
         return count;
     }
 
-    public static List<char[]> deepCopy(List<char[]> other) {
+    private static List<char[]> deepCopy(List<char[]> other) {
         List<char[]> newList = new ArrayList<>();
         for (char[] arr : other) {
             char[] characterArray = new char[arr.length];
-            for (int i = 0; i < arr.length; i++) {
-                characterArray[i] = arr[i];
-            }
+            System.arraycopy(arr, 0, characterArray, 0, arr.length);
             newList.add(characterArray);
-//            newList.add(Arrays.copyOf(arr, arr.length));
         }
         return newList;
     }
 
-    public static char getCharacterIndex(List<char[]> list, int i, int j) {
+    private static char getCharacterIndex(List<char[]> list, int i, int j) {
         return list.get(i)[j];
     }
 
-    public static boolean detectChange(List<char[]> before, List<char[]> after) {
+    private static boolean detectChange(List<char[]> before, List<char[]> after) {
         for (int i = 0; i < before.size(); i++) {
             for (int j = 0; j < before.get(i).length; j++) {
                 if (before.get(i)[j] != after.get(i)[j]) {
@@ -177,6 +163,19 @@ public class SeatingSystem {
             }
         }
         return false;
+    }
+
+    private enum Directional {
+        UP(-1, 0), DOWN(1, 0), LEFT(0, -1), RIGHT(0, 1), UP_RIGHT(-1, 1), UP_LEFT(-1, -1), DOWN_RIGHT(1, 1),
+        DOWN_LEFT(1, -1);
+
+        final int x;
+        final int y;
+
+        Directional(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 
 }
