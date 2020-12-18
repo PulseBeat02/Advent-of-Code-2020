@@ -65,11 +65,11 @@ public class RunSolutions {
             while (resources.hasMoreElements()) {
                 directories.add(new File(URLDecoder.decode(resources.nextElement().getPath(), "UTF-8")));
             }
-        } catch (NullPointerException x) {
+        } catch (NullPointerException nullPointerException) {
             throw new ClassNotFoundException("com.github.pulsebeat02" + " does not appear to be a valid package (Null pointer exception)");
-        } catch (UnsupportedEncodingException encex) {
+        } catch (UnsupportedEncodingException unsupportedEncodingException) {
             throw new ClassNotFoundException("com.github.pulsebeat02" + " does not appear to be a valid package (Unsupported encoding)");
-        } catch (IOException ioex) {
+        } catch (IOException ioException) {
             throw new ClassNotFoundException("IOException was thrown when trying to get all resources for " + "com.github.pulsebeat02");
         }
         List<Class<?>> classes = new ArrayList<>();
@@ -86,8 +86,6 @@ public class RunSolutions {
                             String className = packagePrefix + '.' + file.getName().substring(0, file.getName().length() - 6);
                             classes.add(Class.forName(className));
                         } catch (NoClassDefFoundError ignored) {}
-                    } else if (file.isDirectory()) {
-                        directories.add(new File(file.getPath()));
                     }
                 }
             } else {
