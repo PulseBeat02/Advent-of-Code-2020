@@ -43,7 +43,7 @@ public class PassportProcessing {
         String[] elements = passport.split(" ");
         boolean successful = true;
         for (String requirement : requirements) {
-            if (contains(elements, requirement)) {
+            if (!contains(elements, requirement)) {
                 successful = false;
                 break;
             }
@@ -55,7 +55,7 @@ public class PassportProcessing {
         String[] elements = passport.split(" ");
         boolean successful = true;
         for (String requirement : requirements) {
-            if (contains(elements, requirement)) {
+            if (!contains(elements, requirement)) {
                 successful = false;
                 break;
             }

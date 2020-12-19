@@ -64,7 +64,7 @@ public class RunSolutions {
             }
             Enumeration<URL> resources = cld.getResources(packageToPath);
             while (resources.hasMoreElements()) {
-                directories.add(new File(URLDecoder.decode(resources.nextElement().getPath(), StandardCharsets.UTF_8)));
+                directories.add(new File(URLDecoder.decode(resources.nextElement().getPath(), String.valueOf(StandardCharsets.UTF_8))));
             }
         } catch (NullPointerException nullPointerException) {
             throw new ClassNotFoundException("com.github.pulsebeat02" + " does not appear to be a valid package (Null pointer exception)");
