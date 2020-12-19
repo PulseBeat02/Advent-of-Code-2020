@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -41,7 +42,7 @@ public class RunSolutions {
                 e.printStackTrace();
             }
             long end = System.currentTimeMillis();
-            System.out.println("Time: " + (end - start) / 1000);
+            System.out.println("Time: " + (end - start));
             System.out.println();
         }
     }
@@ -63,7 +64,7 @@ public class RunSolutions {
             }
             Enumeration<URL> resources = cld.getResources(packageToPath);
             while (resources.hasMoreElements()) {
-                directories.add(new File(URLDecoder.decode(resources.nextElement().getPath(), "UTF-8")));
+                directories.add(new File(URLDecoder.decode(resources.nextElement().getPath(), StandardCharsets.UTF_8)));
             }
         } catch (NullPointerException nullPointerException) {
             throw new ClassNotFoundException("com.github.pulsebeat02" + " does not appear to be a valid package (Null pointer exception)");

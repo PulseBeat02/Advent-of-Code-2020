@@ -1,92 +1,123 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Stack;
 
 public class OperationOrder {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("operationorder.txt"));
         String line = br.readLine();
-        int partOneSum = 0;
+        long partOneSum = 0;
+        long partTwoSum = 0;
         while (line != null) {
-            partOneSum += partOne(line);
+            partOneSum += evaluateWhole(noOperatorPrecedence(line));
+            partTwoSum += evaluateWhole(plusOperationPrecedence(line));
             line = br.readLine();
         }
         br.close();
         System.out.println("Part One: " + partOneSum);
+        System.out.println("Part Two: " + partTwoSum);
     }
 
-    public static int partOne(String line) {
-        int innerSum = getFirstNumber(line, 0, line.length());
-        for (int i = 0; i < line.length(); i++) {
-            char c = line.charAt(i);
-            if (c == '(') {
-                innerSum += recurseCalculate(line, i, findClosingParenthesis(line, i));
-            } else if (inBounds(line, i -2) && (inBounds(line, i + 2))) {
-                int secondNumber = Character.getNumericValue(line.charAt(i + 2));
+    private static long evaluateWhole(String line) {
+        Stack<String> stack = new Stack<>();
+        for (char c : line.toCharArray()) {
+            if (c == '+' || c == '*') {
+                long a = Long.parseLong(stack.pop());
+                long b = Long.parseLong(stack.pop());
                 if (c == '+') {
-                    innerSum += secondNumber;
-                } else if (c == '*') {
-                    innerSum *= secondNumber;
+                    stack.push(String.valueOf(a + b));
+                } else {
+                    stack.push(String.valueOf(a * b));
                 }
-            }
-        }
-        return innerSum;
-    }
-
-    public static boolean inBounds(String line, int index) {
-        return index >= 0 && index < line.length();
-    }
-
-    public static int getFirstNumber(String str, int first, int second) {
-        Matcher matcher = Pattern.compile("\\d+").matcher(str.substring(first, second));
-        matcher.find();
-        return Integer.valueOf(matcher.group());
-    }
-
-    private static int recurseCalculate(String line, int first, int second) {
-        int sum = getFirstNumber(line, 0, line.length());
-        for (int i = first + 1; i < second; i++) {
-            if (line.charAt(i) == '(') {
-                int index = findClosingParenthesis(line, i);
-                sum += recurseCalculate(line, i, index);
-                i = index;
             } else {
-                int secondNumber = Character.getNumericValue(line.charAt(getOperatorIndex(line, i) + 2));
-                if (line.charAt(i) == '+') {
-                    sum += secondNumber;
-                } else if (line.charAt(i) == '*') {
-                    sum += secondNumber;
-                }
+                stack.push(String.valueOf(c));
             }
         }
-        return sum;
+        return Long.parseLong(stack.pop());
     }
 
-    private static int getOperatorIndex(String line, int start) {
-        for (int i = 1; i < 5; i++) {
-            if (line.charAt(i) == '+' || line.charAt(i) == '*') {
-                return i;
+    private static String noOperatorPrecedence(String line) {
+        StringBuilder post = new StringBuilder();
+        Stack<Character> stack = new Stack<>();
+        for (char c : line.toCharArray()) {
+            switch (c) {
+                case '+':
+                case '*':
+                    if (stack.isEmpty() || stack.peek() == '(') {
+                        stack.push(c);
+                    } else if (stack.peek() == '+' || stack.peek() == '*') {
+                        post.append(stack.pop());
+                        stack.push(c);
+                    } else {
+                        stack.push(c);
+                    }
+                    break;
+                case '(':
+                    stack.push(c);
+                    break;
+                case ')':
+                    while (stack.peek() != '(') {
+                        post.append(stack.pop());
+                    }
+                    stack.pop();
+                    break;
+                default:
+                    if (c != ' ') {
+                        post.append(c);
+                    }
+                    break;
             }
         }
-        return -1;
+        while (!stack.isEmpty()) {
+            post.append(stack.pop());
+        }
+        return post.toString();
     }
 
-    private static int findClosingParenthesis(String text, int first) {
-        int second = first;
-        int counter = 1;
-        while (counter > 0) {
-            char c = text.charAt(++second);
-            if (c == '(') {
-                counter++;
-            } else if (c == ')') {
-                counter--;
+    private static String plusOperationPrecedence(String line) {
+        StringBuilder postfix = new StringBuilder();
+        Stack<Character> stack = new Stack<>();
+        for (char c : line.toCharArray()) {
+            switch (c) {
+                case '+':
+                case '*':
+                    if (stack.isEmpty() || stack.peek() == '(') {
+                        stack.push(c);
+                    } else if (order(stack.peek()) >= order(c)) {
+                        postfix.append(stack.pop());
+                        stack.push(c);
+                    } else {
+                        stack.push(c);
+                    }
+                    break;
+                case '(':
+                    stack.push(c);
+                    break;
+                case ')':
+                    while (stack.peek() != '(') {
+                        postfix.append(stack.pop());
+                    }
+                    stack.pop();
+                    break;
+                default:
+                    if (c != ' ') {
+                        postfix.append(c);
+                    }
+                    break;
             }
         }
-        return second;
+        while (!stack.isEmpty()) {
+            postfix.append(stack.pop());
+        }
+        return postfix.toString();
     }
 
+    private static int order(char c) {
+        return c == '+' ? 1 : -1;
+    }
 
 }
