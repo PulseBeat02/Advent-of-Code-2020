@@ -25,7 +25,7 @@ public class SeatingSystem {
 
     private static int partOne() {
         List<char[]> changed = deepCopy(reference);
-        List<char[]> seats = deepCopy(changed);
+        List<char[]> seats;
         do {
             seats = deepCopy(changed);
             changed = applyChangePartOne(changed);
@@ -72,7 +72,7 @@ public class SeatingSystem {
 
     private static int partTwo() {
         List<char[]> changed = deepCopy(reference);
-        List<char[]> seats = deepCopy(changed);
+        List<char[]> seats;
         do {
             seats = deepCopy(changed);
             changed = applyChangePartTwo(changed);
