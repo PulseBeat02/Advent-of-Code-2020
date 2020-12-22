@@ -32,9 +32,9 @@ public class MonsterMessages {
                 if (bits[1].contains("|")) {
                     String[] pipes = bits[1].split("\\|");
                     List<List<Integer>> rulesSet = new ArrayList<>();
-                    for (int j = 0; j < pipes.length; j++) {
+                    for (String pipe : pipes) {
                         List<Integer> currentRules = new ArrayList<>();
-                        for (String child : pipes[j].trim().split(" ")) {
+                        for (String child : pipe.trim().split(" ")) {
                             currentRules.add(Integer.parseInt(child));
                         }
                         rulesSet.add(currentRules);
@@ -128,7 +128,7 @@ public class MonsterMessages {
                         size--;
                     }
                     if (size == 0) {
-                        unique.add(new ArrayList<Rule>(queue));
+                        unique.add(new ArrayList<>(queue));
                     }
                     return true;
                 }
@@ -138,9 +138,7 @@ public class MonsterMessages {
     }
 
     private static class Rule {
-        private final int id;
         public Rule(int id) {
-            this.id = id;
         }
     }
 
