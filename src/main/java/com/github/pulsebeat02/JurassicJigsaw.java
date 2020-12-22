@@ -1,12 +1,11 @@
+package com.github.pulsebeat02;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class JurassicJigsaw {
 
@@ -23,7 +22,7 @@ public class JurassicJigsaw {
                 break;
             }
             if (line.startsWith("Tile")) {
-                id = Integer.parseInt(line.substring(5, line.length() - 2));
+                id = Integer.parseInt(line.substring(5, line.length() - 1));
             } else {
                 if (line.isEmpty()) {
                     tiles.add(new Tile(id, tile));
@@ -39,102 +38,71 @@ public class JurassicJigsaw {
         System.out.println("Part One: " + partOne(tiles));
     }
 
-    private static long partOne(List<Tile> tiles) {
-        Map<Tile, List<char[]>> corner = new HashMap<>();
-        for (Tile tile : tiles) {
-            List<char[]> commonBorders = new ArrayList<>();
-            List<char[]> borders = tile.getAllBorders();
-            for (Tile other : tiles) {
-                if (other != tile) {
-                    List<char[]> otherPaneBorders = other.getAllBordersWithFlips();
-                    commonBorders.addAll(getCommonBorders(borders, otherPaneBorders));
+    public static long partOne(List<Tile> tiles) {
+        long prod = 1;
+        for (int i = 0; i < tiles.size(); i++) {
+            Tile first = tiles.get(i);
+            int count = 0;
+            for (int j = 0; j < tiles.size(); j++) {
+                if (i != j) {
+                    Tile second = tiles.get(j);
+                    for (int iRow = 0; iRow < first.sides.length; iRow++) {
+                        for (int jRow = 0; jRow < second.sides.length; jRow++) {
+                            if (Arrays.equals(first.sides[iRow], second.sides[jRow])) {
+                                count++;
+                            }
+                            if (Arrays.equals(first.sides[iRow], reverse(second.sides[jRow]))) {
+                                count++;
+                            }
+                        }
+                    }
+                    prod *= (count == 2 ? first.id : 1);
                 }
             }
-            if (commonBorders.size() == 2) {
-                corner.put(tile, commonBorders);
-            }
         }
-        long product = 1;
-        for (Tile t : corner.keySet()) {
-            product *= t.id;
-        }
-        return product;
+        return prod;
     }
 
-    private static List<char[]> getCommonBorders(List<char[]> commonBorders, List<char[]> borders) {
-        List<char[]> list = new ArrayList<>();
-        for (char[] i : commonBorders) {
-            for (char[] j : borders) {
-                if (Arrays.equals(i, j)) {
-                    list.add(i);
-                }
-            }
+    private static char[] reverse(char[] chars) {
+        char[] copy = Arrays.copyOf(chars, chars.length);
+        for (int i = chars.length - 1; i >= 0; i--) {
+            copy[i] = chars[chars.length - i - 1];
         }
-        return list;
+        return copy;
     }
 
     private static class Tile {
-
-        private final List<char[]> grid;
+        private char[][] grid;
+        private final char[][] sides;
         private final int id;
         public Tile(int id, List<char[]> grid) {
+            char[][] g = new char[grid.size()][grid.get(0).length];
+            for (int i = 0; i < grid.size(); i++) {
+                g[i] = grid.get(i);
+            }
+            this.grid = g;
             this.id = id;
-            this.grid = grid;
+            this.sides = getBorders();
         }
-
-        private List<char[]> getAllBorders() {
-            return new LinkedList<>(Arrays.asList(getBorder(BorderDirection.TOP), getBorder(BorderDirection.LEFT), getBorder(BorderDirection.RIGHT), getBorder(BorderDirection.BOTTOM)));
-        }
-
-        public List<char[]> getAllBordersWithFlips() {
-            List<char[]> borders = getAllBorders();
-            for (int i = 0; i < 3; i++) {
-                char[] border = borders.get(i);
-                char[] chars = Arrays.copyOf(border, grid.size());
-                for (int j = 0; j < chars.length / 2; j++) {
-                    char temp = border[j];
-                    chars[j] = border[border.length - j - 1];
-                    chars[border.length - j - 1] = temp;
-                }
-                borders.add(chars);
+        private char[][] getBorders() {
+            char[] top = new char[grid.length];
+            for (int i = 0; i < grid.length; i++) {
+                top[i] = grid[0][i];
             }
-            return borders;
-        }
-
-        private char[] getBorder(BorderDirection direction) {
-            switch (direction) {
-                case TOP:
-                    char[] top = new char[grid.size()];
-                    for (int i = 0; i < grid.size(); i++) {
-                        top[i] = grid.get(0)[i];
-                    }
-                    return top;
-                case BOTTOM:
-                    char[] bottom = new char[grid.size()];
-                    for (int i = 0; i < grid.size(); i++) {
-                        bottom[i] = grid.get(grid.size() - 1)[i];
-                    }
-                    return bottom;
-                case LEFT:
-                    char[] left = new char[grid.size()];
-                    for (int i = 0; i < grid.size(); i++) {
-                        left[i] = grid.get(i)[0];
-                    }
-                    return left;
-                case RIGHT:
-                    char[] right = new char[grid.size()];
-                    for (int i = 0; i < grid.size(); i++) {
-                        right[i] = grid.get(grid.size() - 1)[grid.size() - 1];
-                    }
-                    return right;
+            char[] bottom = new char[grid.length];
+            for (int i = 0; i < grid.length; i++) {
+                bottom[i] = grid[grid.length - 1][i];
             }
-            return null;
+            char[] left = new char[grid.length];
+            for (int i = 0; i < grid.length; i++) {
+                left[i] = grid[i][0];
+            }
+            char[] right = new char[grid.length];
+            for (int i = 0; i < grid.length; i++) {
+                right[i] = grid[i][grid.length - 1];
+            }
+            return new char[][] { top, bottom, left, right };
         }
-
-        private enum BorderDirection {
-            TOP, BOTTOM, LEFT, RIGHT
-        }
-
     }
 
 }
