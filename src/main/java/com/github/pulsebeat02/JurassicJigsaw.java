@@ -12,7 +12,6 @@ import java.util.Set;
 
 public class JurassicJigsaw {
 
-
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("jurassicjigsaw.txt"));
         List<Tile> tiles = new ArrayList<>();

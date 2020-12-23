@@ -27,7 +27,7 @@ public class MonsterMessages {
             String[] bits = currentLine.split(":");
             int id = Integer.parseInt(bits[0]);
             if (bits[1].charAt(1) == '"') {
-                rules.put(id, new MatchingRule(id, bits[1].charAt(2)));
+                rules.put(id, new MatchingRule(bits[1].charAt(2)));
             } else {
                 if (bits[1].contains("|")) {
                     String[] pipes = bits[1].split("\\|");
@@ -39,14 +39,14 @@ public class MonsterMessages {
                         }
                         rulesSet.add(currentRules);
                     }
-                    rules.put(id, new SubRuleOr(id, rulesSet));
+                    rules.put(id, new SubRuleOr(rulesSet));
                 } else {
                     String[] first = bits[1].trim().split(" ");
                     List<Integer> children = new ArrayList<>();
                     for (String str : first) {
                         children.add(Integer.parseInt(str));
                     }
-                    rules.put(id, new SubRule(id, children));
+                    rules.put(id, new SubRule(children));
                 }
             }
             currentLine = br.readLine();
@@ -59,8 +59,8 @@ public class MonsterMessages {
         }
         br.close();
         System.out.println("Part One: " + calculateCount(rules, queries));
-        rules.replace(8, new SubRuleOr(8, Arrays.asList(Collections.singletonList(42), Arrays.asList(42, 8))));
-        rules.replace(11, new SubRuleOr(11, Arrays.asList(Arrays.asList(42, 31), Arrays.asList(42, 11, 31))));
+        rules.replace(8, new SubRuleOr(Arrays.asList(Collections.singletonList(42), Arrays.asList(42, 8))));
+        rules.replace(11, new SubRuleOr(Arrays.asList(Arrays.asList(42, 31), Arrays.asList(42, 11, 31))));
         System.out.println("Part Two: " + calculateCount(rules, queries));
     }
 
@@ -138,30 +138,25 @@ public class MonsterMessages {
     }
 
     private static class Rule {
-        public Rule(int id) {
-        }
     }
 
     private static class MatchingRule extends Rule {
         private final char character;
-        public MatchingRule(int id, char c) {
-            super(id);
+        public MatchingRule(char c) {
             this.character = c;
         }
     }
 
     private static class SubRule extends Rule {
         private final List<Integer> children;
-        public SubRule(int id, List<Integer> children) {
-            super(id);
+        public SubRule(List<Integer> children) {
             this.children = children;
         }
     }
 
     private static class SubRuleOr extends Rule {
         private final List<List<Integer>> children;
-        public SubRuleOr(int id, List<List<Integer>> children) {
-            super(id);
+        public SubRuleOr(List<List<Integer>> children) {
             this.children = children;
         }
     }

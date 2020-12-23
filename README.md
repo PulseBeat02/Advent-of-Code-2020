@@ -27,7 +27,7 @@
 | #19     | [Monster Messages](https://adventofcode.com/2020/day/19)        | [Solution Code](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/MonsterMessages.java)        |                                                                       |                   
 | #20     | [Jurassic Jigsaw](https://adventofcode.com/2020/day/20)         | In Progress...                                                                                                                                   |                                                                       |
 | #21     | [Allergen Assessment](https://adventofcode.com/2020/day/21)     | [Solution Code](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/AllergenAssessment.java)     |                                                                       |
-| #22     | [Crab Combat](https://adventofcode.com/2020/day/22)             | In Progress...                                                                                                                                   |                                                                       |
+| #22     | [Crab Combat](https://adventofcode.com/2020/day/22)             | [Solution Code](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/CrabCombat.java)             |                                                                       |
 
 **Run ALL Solutions [Beta]**
 [Run All Solutions](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/common/RunSolutions.java)
