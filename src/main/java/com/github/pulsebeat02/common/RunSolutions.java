@@ -86,7 +86,8 @@ public class RunSolutions {
                         try {
                             String className = packagePrefix + '.' + file.getName().substring(0, file.getName().length() - 6);
                             classes.add(Class.forName(className));
-                        } catch (NoClassDefFoundError ignored) {}
+                        } catch (NoClassDefFoundError ignored) {
+                        }
                     }
                 }
             } else {

@@ -241,9 +241,9 @@ public class JurassicJigsaw {
 
     private static class Tile {
         private final int id;
-        private char[][] grid;
         private final char[][] sides;
         private final List<char[]> commonborders;
+        private char[][] grid;
         private boolean corner;
 
         public Tile(int id, List<char[]> g) {
@@ -270,10 +270,6 @@ public class JurassicJigsaw {
             return count;
         }
 
-        private enum BorderType {
-            TOP, BOTTOM, LEFT, RIGHT
-        }
-
         private char[] getBorder(BorderType type) {
             switch (type) {
                 case TOP:
@@ -298,6 +294,10 @@ public class JurassicJigsaw {
                     return right;
             }
             return null;
+        }
+
+        private enum BorderType {
+            TOP, BOTTOM, LEFT, RIGHT
         }
 
     }

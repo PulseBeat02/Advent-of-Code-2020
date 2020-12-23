@@ -13,6 +13,8 @@ import java.util.Set;
 
 public class CrabCombat {
 
+    private static final Queue<Integer> winner = new ArrayDeque<>();
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("crabcombat.txt"));
         br.readLine();
@@ -66,7 +68,6 @@ public class CrabCombat {
         return sum;
     }
 
-    private static final Queue<Integer> winner = new ArrayDeque<>();
     private static int partTwo(List<Integer> first, List<Integer> second) {
         recursiveBattle(new ArrayDeque<>(first), new ArrayDeque<>(second), winner, first.size(), second.size());
         int sum = 0;

@@ -25,14 +25,15 @@
 | #17     | [Conway Cubes](https://adventofcode.com/2020/day/17)            | [Solution Code](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/ConwayCubes.java)            |                                                                       |
 | #18     | [Operation Order](https://adventofcode.com/2020/day/18)         | [Solution Code](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/OperationOrder.java)         |                                                                       |
 | #19     | [Monster Messages](https://adventofcode.com/2020/day/19)        | [Solution Code](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/MonsterMessages.java)        |                                                                       |                   
-| #20     | [Jurassic Jigsaw](https://adventofcode.com/2020/day/20)         | In Progress...                                                                                                                                   |                                                                       |
-| #21     | [Allergen Assessment](https://adventofcode.com/2020/day/21)     | [Solution Code](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/AllergenAssessment.java)     |                                                                       |
+| #20     | [Jurassic Jigsaw](https://adventofcode.com/2020/day/20)         | [Solution Code](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/MonsterMessages.java)        |                                                                       |
+| #21     | [Allergen Assessment](https://adventofcode.com/2020/day/21)     | [Part One Solution](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/AllergenAssessment.java) |                                                                       |
 | #22     | [Crab Combat](https://adventofcode.com/2020/day/22)             | [Solution Code](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/CrabCombat.java)             |                                                                       |
+| #23     | [Crab Cups](https://adventofcode.com/2020/day/23)               | [Solution Code](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/CrabCups.java)               |                                                                       |
 
 **Run ALL Solutions [Beta]**
 [Run All Solutions](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/common/RunSolutions.java)
 
-*Note:* This class is currently in beta and uses a lot of hacky reflection features in order to perform the task. It may be buggy.
+*Note:* This class is currently in beta and uses a lot of hacky reflection features in order to perform the task. It may be buggy. Works for Mac OS **only** at the moment.
 
 ---
 

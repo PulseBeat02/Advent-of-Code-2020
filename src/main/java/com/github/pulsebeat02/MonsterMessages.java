@@ -105,9 +105,9 @@ public class MonsterMessages {
         } else {
             List<List<Integer>> allRules = new ArrayList<>();
             if (rule instanceof SubRule) {
-                allRules.add(((SubRule)rule).children);
+                allRules.add(((SubRule) rule).children);
             } else if (rule instanceof SubRuleOr) {
-                allRules = new ArrayList<>(((SubRuleOr)rule).children);
+                allRules = new ArrayList<>(((SubRuleOr) rule).children);
             }
             for (List<Integer> allRule : allRules) {
                 boolean matches = true;
@@ -142,6 +142,7 @@ public class MonsterMessages {
 
     private static class MatchingRule extends Rule {
         private final char character;
+
         public MatchingRule(char c) {
             this.character = c;
         }
@@ -149,6 +150,7 @@ public class MonsterMessages {
 
     private static class SubRule extends Rule {
         private final List<Integer> children;
+
         public SubRule(List<Integer> children) {
             this.children = children;
         }
@@ -156,6 +158,7 @@ public class MonsterMessages {
 
     private static class SubRuleOr extends Rule {
         private final List<List<Integer>> children;
+
         public SubRuleOr(List<List<Integer>> children) {
             this.children = children;
         }
