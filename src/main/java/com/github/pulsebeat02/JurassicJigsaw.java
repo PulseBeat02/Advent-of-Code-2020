@@ -1,13 +1,18 @@
 package com.github.pulsebeat02;
 
+import com.sun.deploy.net.MessageHeader;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 public class JurassicJigsaw {
@@ -53,13 +58,9 @@ public class JurassicJigsaw {
                     for (int iRow = 0; iRow < first.sides.length; iRow++) {
                         for (int jRow = 0; jRow < second.sides.length; jRow++) {
                             if (Arrays.equals(first.sides[iRow], second.sides[jRow])) {
-                                first.commonborders.add(second.sides[jRow]);
-                                second.commonborders.add(first.sides[jRow]);
                                 count++;
                             }
                             if (Arrays.equals(first.sides[iRow], reverse(second.sides[jRow]))) {
-                                first.commonborders.add(reverse(second.sides[jRow]));
-                                second.commonborders.add(first.sides[jRow]);
                                 count++;
                             }
                         }
@@ -76,7 +77,6 @@ public class JurassicJigsaw {
 
     public static long partTwo(List<Tile> tiles) {
         int side = (int) Math.sqrt(tiles.size());
-        Tile[][] grid = new Tile[side][side];
         Set<Tile> used = new HashSet<>();
         Tile first = null;
         for (Tile t : tiles) {
@@ -86,129 +86,50 @@ public class JurassicJigsaw {
             }
         }
         assert first != null;
-        alignToSide(first, first.commonborders.get(0), Tile.BorderType.RIGHT)
-                .flatMap(t -> alignToSide(t, t.commonborders.get(1), Tile.BorderType.BOTTOM))
-                .ifPresent(t -> grid[0][0] = t);
+        Map<Tile, Set<Pair<char[], Tile>>> matches = getPossibleMatches(tiles);
+        Queue<Tile> grid = new ArrayDeque<>();
+        grid.add(first);
+        while (grid.size() > 0) {
+            for (Tile tile : matches.keySet()) {
 
-        for (int i = 1; i < side; i++) {
-            for (Tile t : tiles) {
-                if (!used.contains(t)) {
-                    int j = i;
-                    alignToSide(t, grid[0][i - 1].getBorder(Tile.BorderType.RIGHT), Tile.BorderType.LEFT)
-                            .ifPresent(align -> {
-                                grid[0][j] = align;
-                                used.add(align);
-                            });
-                }
             }
         }
 
-        for (int i = 1; i < side; i++) {
-            for (int j = 0; j < side; j++) {
-                for (Tile t : tiles) {
-                    if (!used.contains(t)) {
-                        Optional<Tile> result = alignToSide(t, grid[i - 1][j].getBorder(Tile.BorderType.BOTTOM), Tile.BorderType.TOP);
-                        if (result.isPresent()) {
-                            grid[i][j] = result.get();
-                            used.add(result.get());
-                            break;
+    }
+
+    // key -> which tile
+    // value -> Set<Pair<char[], Tile>> -> side and which tile it's associated with
+    private static Map<Tile, Set<Pair<char[], Tile>>> getPossibleMatches(List<Tile> tiles) {
+        Map<Tile, Set<Pair<char[], Tile>>> matches = new HashMap<>();
+        for (int i = 0; i < tiles.size(); i++) {
+            for (int j = i + 1; j < tiles.size(); j++) {
+                Tile first = tiles.get(i);
+                Tile second = tiles.get(j);
+                for (char[] firstSide : tiles.get(i).sides) {
+                    for (char[] secondSide : tiles.get(j).sides) {
+                        if (Arrays.equals(firstSide, secondSide)) {
+                            if (!matches.containsKey(first)) {
+                                Set<Pair<char[], Tile>> child = new HashSet<>();
+                                child.add(new Pair<>(secondSide, second));
+                                matches.put(first, child);
+                            } else {
+                                matches.get(first).add(new Pair<>(secondSide, second));
+                            }
                         }
-                    }
-                }
-            }
-        }
-        List<String> monster = Arrays.asList("                  # ", "#    ##    ##    ###", " #  #  #  #  #  #   ");
-        char[][] monsterArray = new char[monster.size()][monster.get(0).length()];
-        for (int i = 0; i < monster.size(); i++) {
-            monsterArray[i] = monster.get(i).toCharArray();
-        }
-        return waterRoughness(createBigMapPane(grid), monsterArray);
-    }
-
-    private static Tile createBigMapPane(Tile[][] panesMap) {
-        int n = panesMap.length;
-        List<char[]> axis = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                char[][] area = panesMap[i][j].grid;
-                for (int x = 1; x < area.length - 1; x++) {
-                    for (int y = 1; y < area.length - 1; y++) {
-                        axis.get(i * (area.length - 2) + (x - 1))[j * (area.length - 2) + (y - 1)] = area[x][y];
-                    }
-                }
-            }
-        }
-        return new Tile(0, axis);
-    }
-
-    private static int waterRoughness(Tile pane, char[][] monster) {
-        int monsterHash = 0;
-        for (char[] chars : monster) {
-            for (char aChar : chars) {
-                if (aChar == '#') {
-                    monsterHash++;
-                }
-            }
-        }
-        for (int i = 0; i < 4; i++) {
-            pane.grid = rotate(pane.grid);
-            int nrOfMonsters = countMonsters(pane, monster);
-            if (nrOfMonsters != 0) {
-                return pane.countHashes() - nrOfMonsters * monsterHash;
-            }
-        }
-
-        pane.grid = flip(pane.grid);
-        for (int i = 0; i < 4; i++) {
-            pane.grid = rotate(pane.grid);
-            int nrOfMonsters = countMonsters(pane, monster);
-            if (nrOfMonsters != 0) {
-                return pane.countHashes() - nrOfMonsters * monsterHash;
-            }
-        }
-        return 0;
-    }
-
-    private static int countMonsters(Tile pane, char[][] monster) {
-        int monsterCounter = 0;
-        char[][] grid = pane.grid;
-        for (int i = 0; i < grid.length - monster.length; i++) {
-            for (int j = 0; j < grid[0].length - monster[0].length; j++) {
-                boolean allMatch = true;
-                label:
-                for (int x = 0; x < monster.length; x++) {
-                    for (int y = 0; y < monster[0].length; y++) {
-                        if (monster[x][y] == '#') {
-                            if (grid[i + x][j + y] != '#') {
-                                allMatch = false;
-                                break label;
+                        if (Arrays.equals(firstSide, reverse(secondSide))) {
+                            if (!matches.containsKey(first)) {
+                                Set<Pair<char[], Tile>> child = new HashSet<>();
+                                child.add(new Pair<>(reverse(secondSide), second));
+                                matches.put(first, child);
+                            } else {
+                                matches.get(first).add(new Pair<>(reverse(secondSide), second));
                             }
                         }
                     }
                 }
-                if (allMatch) {
-                    monsterCounter++;
-                }
             }
         }
-        return monsterCounter;
-    }
-
-    private static Optional<Tile> alignToSide(Tile pane, char[] border, Tile.BorderType type) {
-        for (int i = 0; i < 4; i++) {
-            pane.grid = rotate(pane.grid);
-            if (Arrays.equals(border, pane.getBorder(type))) {
-                return Optional.of(pane);
-            }
-        }
-        pane.grid = flip(pane.grid);
-        for (int i = 0; i < 4; i++) {
-            pane.grid = rotate(pane.grid);
-            if (Arrays.equals(border, pane.getBorder(type))) {
-                return Optional.of(pane);
-            }
-        }
-        return Optional.empty();
+        return matches;
     }
 
     private static char[] reverse(char[] chars) {
@@ -219,31 +140,32 @@ public class JurassicJigsaw {
         return copy;
     }
 
-    private static char[][] rotate(char[][] grid) {
-        final int M = grid.length;
-        final int N = grid[0].length;
-        char[][] rot = new char[N][M];
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < N; j++) {
-                rot[j][M - 1 - i] = grid[i][j];
+    private char[][] getBorderless(char[][] grid) {
+        char[][] borderless = new char[grid.length - 2][grid.length - 2];
+        for (int i = 1; i < grid.length - 1; i++) {
+            char[] change = new char[grid.length - 2];
+            for (int j = 1; j < grid.length - 1; j++) {
+                change[j] = grid[i][j];
             }
+            borderless[i] = change;
         }
-        return rot;
+        return borderless;
     }
 
-    private static char[][] flip(char[][] grid) {
-        char[][] flip = new char[grid.length][grid.length];
-        for (int i = 0; i < grid.length / 2; i++) {
-            flip[i] = grid[grid.length - i - 1];
+    private static class Pair<K, V> {
+        private final K key;
+        private final V value;
+        public Pair(K key, V value) {
+            this.key = key;
+            this.value = value;
         }
-        return flip;
     }
 
     private static class Tile {
+
         private final int id;
         private final char[][] sides;
-        private final List<char[]> commonborders;
-        private char[][] grid;
+        private final char[][] grid;
         private boolean corner;
 
         public Tile(int id, List<char[]> g) {
@@ -254,20 +176,7 @@ public class JurassicJigsaw {
             this.id = id;
             this.grid = grid;
             this.sides = new char[][]{getBorder(BorderType.TOP), getBorder(BorderType.BOTTOM), getBorder(BorderType.LEFT), getBorder(BorderType.RIGHT)};
-            this.commonborders = new ArrayList<>();
             this.corner = false;
-        }
-
-        private int countHashes() {
-            int count = 0;
-            for (char[] chars : grid) {
-                for (char aChar : chars) {
-                    if (aChar == '#') {
-                        count++;
-                    }
-                }
-            }
-            return count;
         }
 
         private char[] getBorder(BorderType type) {
