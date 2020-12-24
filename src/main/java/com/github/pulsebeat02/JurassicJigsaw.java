@@ -1,7 +1,5 @@
 package com.github.pulsebeat02;
 
-import com.sun.deploy.net.MessageHeader;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -76,7 +74,6 @@ public class JurassicJigsaw {
     }
 
     public static long partTwo(List<Tile> tiles) {
-        int side = (int) Math.sqrt(tiles.size());
         Set<Tile> used = new HashSet<>();
         Tile first = null;
         for (Tile t : tiles) {
@@ -86,21 +83,36 @@ public class JurassicJigsaw {
             }
         }
         assert first != null;
-        Map<Tile, Set<Pair<char[], Tile>>> matches = getPossibleMatches(tiles);
+        Map<Tile, List<Pair<char[], Tile>>> matches = getPossibleMatches(tiles);
         Queue<Tile> grid = new ArrayDeque<>();
         grid.add(first);
         while (grid.size() > 0) {
             for (Tile tile : matches.keySet()) {
+                List<Pair<char[], Tile>> match = matches.get(tile);
+                if (match.size() == 1) {
+                    int side = getSide(tile, match.get(0).key);
 
+                } else {
+
+                }
             }
         }
+        return -1L;
+    }
 
+    private static int getSide(Tile tile, char[] side) {
+        for (int i = 0; i < tile.sides.length; i++) {
+            if (Arrays.equals(tile.sides[i], side)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     // key -> which tile
     // value -> Set<Pair<char[], Tile>> -> side and which tile it's associated with
-    private static Map<Tile, Set<Pair<char[], Tile>>> getPossibleMatches(List<Tile> tiles) {
-        Map<Tile, Set<Pair<char[], Tile>>> matches = new HashMap<>();
+    private static Map<Tile, List<Pair<char[], Tile>>> getPossibleMatches(List<Tile> tiles) {
+        Map<Tile, List<Pair<char[], Tile>>> matches = new HashMap<>();
         for (int i = 0; i < tiles.size(); i++) {
             for (int j = i + 1; j < tiles.size(); j++) {
                 Tile first = tiles.get(i);
@@ -109,7 +121,7 @@ public class JurassicJigsaw {
                     for (char[] secondSide : tiles.get(j).sides) {
                         if (Arrays.equals(firstSide, secondSide)) {
                             if (!matches.containsKey(first)) {
-                                Set<Pair<char[], Tile>> child = new HashSet<>();
+                                List<Pair<char[], Tile>> child = new ArrayList<>();
                                 child.add(new Pair<>(secondSide, second));
                                 matches.put(first, child);
                             } else {
@@ -118,7 +130,7 @@ public class JurassicJigsaw {
                         }
                         if (Arrays.equals(firstSide, reverse(secondSide))) {
                             if (!matches.containsKey(first)) {
-                                Set<Pair<char[], Tile>> child = new HashSet<>();
+                                List<Pair<char[], Tile>> child = new ArrayList<>();
                                 child.add(new Pair<>(reverse(secondSide), second));
                                 matches.put(first, child);
                             } else {
@@ -155,6 +167,7 @@ public class JurassicJigsaw {
     private static class Pair<K, V> {
         private final K key;
         private final V value;
+
         public Pair(K key, V value) {
             this.key = key;
             this.value = value;
@@ -210,5 +223,4 @@ public class JurassicJigsaw {
         }
 
     }
-
 }

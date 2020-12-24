@@ -40,14 +40,14 @@ public class CrabCups {
         Map<Integer, CircularLinkedHashList.EntryNode> map = circle.map;
         int moves = 0;
         while (moves < 10000000) {
-            CircularLinkedHashList<Integer, CircularLinkedHashList.EntryNode> removedThree = circle.popPrecedentThree(current);
-            Set<Integer> removed = new HashSet<>(Arrays.asList(removedThree.current.key, removedThree.current.next.key, removedThree.current.next.next.key));
+            CircularLinkedHashList<Integer, CircularLinkedHashList.EntryNode> pickup = circle.popPrecedentThree(current);
+            Set<Integer> removed = new HashSet<>(Arrays.asList(pickup.current.key, pickup.current.next.key, pickup.current.next.next.key));
             int destCup = current.key - 1;
             destCup = destCup < min ? 1000000 : destCup;
             while (removed.contains(destCup)) {
                 destCup = destCup - 1 < min ? 1000000 : destCup - 1;
             }
-            circle.addAll(map.get(destCup), removedThree);
+            circle.addAll(map.get(destCup), pickup);
             current = current.next;
             moves++;
         }
