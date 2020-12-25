@@ -3,224 +3,334 @@ package com.github.pulsebeat02;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class JurassicJigsaw {
 
+    private static final Point[] SEA_MONSTER_COORDINATES = new Point[]{
+            new Point(18, 0),
+            new Point(0, 1),
+            new Point(5, 1),
+            new Point(6, 1),
+            new Point(11, 1),
+            new Point(12, 1),
+            new Point(17, 1),
+            new Point(18, 1),
+            new Point(19, 1),
+            new Point(1, 2),
+            new Point(4, 2),
+            new Point(7, 2),
+            new Point(10, 2),
+            new Point(13, 2),
+            new Point(16, 2)
+    };
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("jurassicjigsaw.txt"));
-        List<Tile> tiles = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
         String line = br.readLine();
-        List<char[]> tile = new ArrayList<>();
-        int id = 0;
-        while (true) {
-            if (line == null) {
-                tiles.add(new Tile(id, tile));
-                tile.clear();
-                break;
-            }
-            if (line.startsWith("Tile")) {
-                id = Integer.parseInt(line.substring(5, line.length() - 1));
-            } else {
-                if (line.isEmpty()) {
-                    tiles.add(new Tile(id, tile));
-                    tile.clear();
-                    id = 0;
-                } else {
-                    tile.add(line.toCharArray());
-                }
-            }
+        while (line != null) {
+            sb.append(line);
             line = br.readLine();
         }
-        br.close();
-        System.out.println("Part One: " + partOne(tiles));
-        System.out.println("Part Two: " + partTwo(tiles));
+        System.out.println("Part One: " + partOne(sb.toString()));
+        System.out.println("Part Two: " + partTwo(sb.toString()));
     }
 
-    public static long partOne(List<Tile> tiles) {
-        long product = 1;
-        for (int i = 0; i < tiles.size(); i++) {
-            Tile first = tiles.get(i);
-            int count = 0;
-            for (int j = 0; j < tiles.size(); j++) {
-                if (i != j) {
-                    Tile second = tiles.get(j);
-                    for (int iRow = 0; iRow < first.sides.length; iRow++) {
-                        for (int jRow = 0; jRow < second.sides.length; jRow++) {
-                            if (Arrays.equals(first.sides[iRow], second.sides[jRow])) {
-                                count++;
-                            }
-                            if (Arrays.equals(first.sides[iRow], reverse(second.sides[jRow]))) {
-                                count++;
-                            }
-                        }
+    public static String partOne(String input) {
+        var tiles = tiles(input);
+        var length = (int) Math.sqrt(tiles.size());
+        var arrangement = findArrangement(length, tiles, new HashMap<>(),
+                new HashSet<>(tiles.keySet()), new Point(0, 0));
+        var upperLeft = arrangement.get(new Point(0, 0)).number;
+        var lowerLeft = arrangement.get(new Point(0, length - 1)).number;
+        var upperRight = arrangement.get(new Point(length - 1, 0)).number;
+        var lowerRight = arrangement.get(new Point(length - 1, length - 1)).number;
+        return String.valueOf(upperLeft * lowerLeft * upperRight * lowerRight);
+    }
+
+    public static String partTwo(String input) {
+        var tiles = tiles(input);
+        var length = (int) Math.sqrt(tiles.size());
+        var arrangement = findArrangement(length, tiles, new HashMap<>(),
+                new HashSet<>(tiles.keySet()), new Point(0, 0));
+        var tileLength = arrangement.get(new Point(0, 0)).data.length;
+        var imageSize = length * (tileLength - 2);
+        boolean[][] image = new boolean[imageSize][imageSize];
+        var y = 0;
+        for (var row = 0; row < length; row++) {
+            for (var tileHeight = 1; tileHeight <= tileLength - 2; tileHeight++) {
+                var x = 0;
+                for (var col = 0; col < length; col++) {
+                    var tile = arrangement.get(new Point(col, row)).data;
+                    for (var tileWidth = 1; tileWidth <= tileLength - 2; tileWidth++) {
+                        image[y][x] = tile[tileHeight][tileWidth];
+                        x++;
                     }
                 }
-            }
-            if (count == 2) {
-                product *= first.id;
-                first.corner = true;
+                y++;
             }
         }
-        return product;
+        if (removeAllSeaMonsters(image)) {
+            return String.valueOf(roughness(image));
+        }
+        image = rotateGrid(image);
+        if (removeAllSeaMonsters(image)) {
+            return String.valueOf(roughness(image));
+        }
+        image = rotateGrid(image);
+        if (removeAllSeaMonsters(image)) {
+            return String.valueOf(roughness(image));
+        }
+        image = rotateGrid(image);
+        if (removeAllSeaMonsters(image)) {
+            return String.valueOf(roughness(image));
+        }
+        image = flipGrid(image);
+        if (removeAllSeaMonsters(image)) {
+            return String.valueOf(roughness(image));
+        }
+        image = rotateGrid(image);
+        if (removeAllSeaMonsters(image)) {
+            return String.valueOf(roughness(image));
+        }
+        image = rotateGrid(image);
+        if (removeAllSeaMonsters(image)) {
+            return String.valueOf(roughness(image));
+        }
+        image = rotateGrid(image);
+        if (removeAllSeaMonsters(image)) {
+            return String.valueOf(roughness(image));
+        }
+        throw new IllegalStateException("Unable to find the solution");
     }
 
-    public static long partTwo(List<Tile> tiles) {
-        Set<Tile> used = new HashSet<>();
-        Tile first = null;
-        for (Tile t : tiles) {
-            if (t.corner) {
-                first = t;
-                break;
+    private static Map<Point, Tile> findArrangement(int length, Map<Long, Set<Tile>> allTiles,
+                                                    Map<Point, Tile> selectedTiles, Set<Long> tilesRemaining,
+                                                    Point point) {
+        if (tilesRemaining.isEmpty()) {
+            return selectedTiles;
+        }
+        var possibleTiles = allTiles.entrySet().stream()
+                .filter(e -> tilesRemaining.contains(e.getKey()))
+                .flatMap(e -> e.getValue().stream())
+                .filter(tile -> tile.fits(
+                        selectedTiles.get(point.move(0, -1)),
+                        selectedTiles.get(point.move(0, 1)),
+                        selectedTiles.get(point.move(-1, 0)),
+                        selectedTiles.get(point.move(1, 0))))
+                .collect(Collectors.toSet());
+        if (possibleTiles.isEmpty()) {
+            return new HashMap<>();
+        }
+        for (var tile : possibleTiles) {
+            selectedTiles.put(point, tile);
+            tilesRemaining.remove(tile.number);
+            var result = findArrangement(length, allTiles, selectedTiles, tilesRemaining,
+                    nextPoint(length, point));
+            if (!result.isEmpty()) {
+                return result;
+            } else {
+                selectedTiles.remove(point, tile);
+                tilesRemaining.add(tile.number);
             }
         }
-        assert first != null;
-        Map<Tile, List<Pair<char[], Tile>>> matches = getPossibleMatches(tiles);
-        Queue<Tile> grid = new ArrayDeque<>();
-        grid.add(first);
-        while (grid.size() > 0) {
-            for (Tile tile : matches.keySet()) {
-                List<Pair<char[], Tile>> match = matches.get(tile);
-                if (match.size() == 1) {
-                    int side = getSide(tile, match.get(0).key);
-
-                } else {
-
-                }
-            }
-        }
-        return -1L;
+        return new HashMap<>();
     }
 
-    private static int getSide(Tile tile, char[] side) {
-        for (int i = 0; i < tile.sides.length; i++) {
-            if (Arrays.equals(tile.sides[i], side)) {
-                return i;
-            }
+    private static Point nextPoint(int length, Point point) {
+        if (point.y() + 1 == length) {
+            return new Point(point.x() + 1, 0);
+        } else {
+            return new Point(point.x(), point.y() + 1);
         }
-        return -1;
     }
 
-    // key -> which tile
-    // value -> Set<Pair<char[], Tile>> -> side and which tile it's associated with
-    private static Map<Tile, List<Pair<char[], Tile>>> getPossibleMatches(List<Tile> tiles) {
-        Map<Tile, List<Pair<char[], Tile>>> matches = new HashMap<>();
-        for (int i = 0; i < tiles.size(); i++) {
-            for (int j = i + 1; j < tiles.size(); j++) {
-                Tile first = tiles.get(i);
-                Tile second = tiles.get(j);
-                for (char[] firstSide : tiles.get(i).sides) {
-                    for (char[] secondSide : tiles.get(j).sides) {
-                        if (Arrays.equals(firstSide, secondSide)) {
-                            if (!matches.containsKey(first)) {
-                                List<Pair<char[], Tile>> child = new ArrayList<>();
-                                child.add(new Pair<>(secondSide, second));
-                                matches.put(first, child);
-                            } else {
-                                matches.get(first).add(new Pair<>(secondSide, second));
-                            }
-                        }
-                        if (Arrays.equals(firstSide, reverse(secondSide))) {
-                            if (!matches.containsKey(first)) {
-                                List<Pair<char[], Tile>> child = new ArrayList<>();
-                                child.add(new Pair<>(reverse(secondSide), second));
-                                matches.put(first, child);
-                            } else {
-                                matches.get(first).add(new Pair<>(reverse(secondSide), second));
-                            }
-                        }
-                    }
-                }
+    private static Map<Long, Set<Tile>> tiles(String lines) {
+        var tiles = new HashMap<Long, Set<Tile>>();
+        for (var input : lines.split("\n\n")) {
+            var tile = Tile.parse(input);
+            tiles.put(tile.number, new HashSet<>(Arrays.asList(
+                    tile,
+                    tile.rotate(),
+                    tile.rotate().rotate(),
+                    tile.rotate().rotate().rotate(),
+                    tile.flip(),
+                    tile.flip().rotate(),
+                    tile.flip().rotate().rotate(),
+                    tile.flip().rotate().rotate().rotate())));
+        }
+        return tiles;
+    }
+
+    private static boolean[][] rotateGrid(boolean[][] grid) {
+        var height = grid.length;
+        var width = grid[0].length;
+        var nextGrid = new boolean[height][width];
+        for (var y = 0; y < height; y++) {
+            for (var x = 0; x < width; x++) {
+                nextGrid[y][width - x - 1] = grid[x][y];
+            }
+        }
+        return nextGrid;
+    }
+
+    private static boolean[][] flipGrid(boolean[][] grid) {
+        var height = grid.length;
+        var width = grid[0].length;
+        var nextGrid = new boolean[height][width];
+        for (var y = 0; y < (height / 2); y++) {
+            for (var x = 0; x < width; x++) {
+                nextGrid[y][x] = grid[grid.length - y - 1][x];
+                nextGrid[grid.length - y - 1][x] = grid[y][x];
+            }
+        }
+        return nextGrid;
+    }
+
+    private static boolean removeAllSeaMonsters(boolean[][] image) {
+        boolean removed = false;
+        for (var y = 0; y < image.length; y++) {
+            for (var x = 0; x < image[0].length; x++) {
+                removed |= removeSeaMonster(image, y, x);
+            }
+        }
+        return removed;
+    }
+
+    private static boolean removeSeaMonster(boolean[][] image, int y, int x) {
+        if (y + 3 > image.length) {
+            return false; // Out of bounds
+        }
+        if (x + 20 > image[0].length) {
+            return false; // Out of bounds
+        }
+        boolean matches = true;
+        for (var point : SEA_MONSTER_COORDINATES) {
+            int height = (int) (y + point.y());
+            int width = (int) (x + point.x());
+            var value = image[height][width];
+            matches &= value;
+        }
+        if (matches) {
+            for (var point : SEA_MONSTER_COORDINATES) {
+                image[(int) (y + point.y())][(int) (x + point.x())] = false;
             }
         }
         return matches;
     }
 
-    private static char[] reverse(char[] chars) {
-        char[] copy = Arrays.copyOf(chars, chars.length);
-        for (int i = chars.length - 1; i >= 0; i--) {
-            copy[i] = chars[chars.length - i - 1];
-        }
-        return copy;
-    }
-
-    private char[][] getBorderless(char[][] grid) {
-        char[][] borderless = new char[grid.length - 2][grid.length - 2];
-        for (int i = 1; i < grid.length - 1; i++) {
-            char[] change = new char[grid.length - 2];
-            for (int j = 1; j < grid.length - 1; j++) {
-                change[j] = grid[i][j];
+    private static int roughness(boolean[][] image) {
+        var count = 0;
+        for (boolean[] slice : image) {
+            for (var x = 0; x < image[0].length; x++) {
+                if (slice[x]) {
+                    count++;
+                }
             }
-            borderless[i] = change;
         }
-        return borderless;
-    }
-
-    private static class Pair<K, V> {
-        private final K key;
-        private final V value;
-
-        public Pair(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
+        return count;
     }
 
     private static class Tile {
 
-        private final int id;
-        private final char[][] sides;
-        private final char[][] grid;
-        private boolean corner;
+        private final long number;
+        private final boolean[][] data;
 
-        public Tile(int id, List<char[]> g) {
-            char[][] grid = new char[g.size()][g.get(0).length];
-            for (int i = 0; i < g.size(); i++) {
-                g.set(i, g.get(i));
-            }
-            this.id = id;
-            this.grid = grid;
-            this.sides = new char[][]{getBorder(BorderType.TOP), getBorder(BorderType.BOTTOM), getBorder(BorderType.LEFT), getBorder(BorderType.RIGHT)};
-            this.corner = false;
+        public Tile(long number, boolean[][] data) {
+            this.number = number;
+            this.data = data;
         }
 
-        private char[] getBorder(BorderType type) {
-            switch (type) {
-                case TOP:
-                    char[] top = new char[grid.length];
-                    System.arraycopy(grid[0], 0, top, 0, grid.length);
-                    return top;
-                case BOTTOM:
-                    char[] bottom = new char[grid.length];
-                    System.arraycopy(grid[grid.length - 1], 0, bottom, 0, grid.length);
-                    return bottom;
-                case LEFT:
-                    char[] left = new char[grid.length];
-                    for (int i = 0; i < grid.length; i++) {
-                        left[i] = grid[i][0];
+        private static Tile parse(String input) {
+            var lines = input.split("\n");
+            var number = Long.parseLong(lines[0].replaceAll("^Tile (\\d+):", "$1"));
+            var height = lines.length - 1;
+            var width = lines[1].length();
+            var data = new boolean[width][height];
+            for (var y = 0; y < height; y++) {
+                var line = lines[y + 1];
+                for (var x = 0; x < width; x++) {
+                    if (line.charAt(x) == '#') {
+                        data[y][x] = true;
                     }
-                    return left;
-                case RIGHT:
-                    char[] right = new char[grid.length];
-                    for (int i = 0; i < grid.length; i++) {
-                        right[i] = grid[i][grid.length - 1];
-                    }
-                    return right;
+                }
             }
-            return null;
+            return new Tile(number, data);
         }
 
-        private enum BorderType {
-            TOP, BOTTOM, LEFT, RIGHT
+        private Tile rotate() {
+            return new Tile(number, rotateGrid(data));
+        }
+
+        private Tile flip() {
+            return new Tile(number, flipGrid(data));
+        }
+
+        private boolean[] topEdge() {
+            return data[0];
+        }
+
+        private boolean[] bottomEdge() {
+            return data[data.length - 1];
+        }
+
+        private boolean[] leftEdge() {
+            var edge = new boolean[data.length];
+            for (var y = 0; y < data.length; y++) {
+                edge[y] = data[y][0];
+            }
+            return edge;
+        }
+
+        private boolean[] rightEdge() {
+            var edge = new boolean[data.length];
+            for (var y = 0; y < data.length; y++) {
+                edge[y] = data[y][data[0].length - 1];
+            }
+            return edge;
+        }
+
+        private boolean fits(Tile above, Tile below, Tile left, Tile right) {
+            return (above == null || Arrays.equals(this.topEdge(), above.bottomEdge()))
+                    && (below == null || Arrays.equals(this.bottomEdge(), below.topEdge()))
+                    && (left == null || Arrays.equals(this.leftEdge(), left.rightEdge()))
+                    && (right == null || Arrays.equals(this.rightEdge(), right.leftEdge()));
         }
 
     }
+
+    private static class Point {
+
+        private final long x;
+        private final long y;
+
+        public Point(long x, long y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public static long manhattanDistance(Point p1, Point p2) {
+            return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);
+        }
+
+        private long x() {
+            return x;
+        }
+
+        private long y() {
+            return y;
+        }
+
+        public Point move(long dx, long dy) {
+            return new Point(x + dx, y + dy);
+        }
+
+    }
+
 }

@@ -55,17 +55,17 @@ public class LobbyLayout {
         int yMid = floor[0].length / 2;
         for (String in : input) {
             String coords = getCoordinates(in);
-            int x = Integer.parseInt(coords.split(",")[0]);
-            int y = Integer.parseInt(coords.split(",")[1]);
+            int x = Integer.parseInt(coords.split(" ")[0]);
+            int y = Integer.parseInt(coords.split(" ")[1]);
             floor[yMid + y][xMid + x] = !floor[yMid + y][xMid + x];
         }
         for (int i = 0; i < 100; i++) {
             floor = updateFloor(floor);
         }
         int count = 0;
-        for (boolean[] booleans : floor) {
-            for (int c = 0; c < floor[0].length; c++) {
-                if (booleans[c]) {
+        for (boolean[] array : floor) {
+            for (boolean b : array) {
+                if (b) {
                     count++;
                 }
             }
@@ -149,7 +149,7 @@ public class LobbyLayout {
             }
 
         }
-        return x + "," + y;
+        return x + " " + y;
     }
 
     private static int partOne(List<List<Instruction>> instructions) {
