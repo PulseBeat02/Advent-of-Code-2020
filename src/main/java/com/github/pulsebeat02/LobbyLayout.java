@@ -1,22 +1,19 @@
 package com.github.pulsebeat02;
 
-import com.sun.corba.se.impl.orbutil.HexOutputStream;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class LobbyLayout {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("lobbylayout.txt"));
         List<List<Instruction>> instructions = new ArrayList<>();
+        List<String> lines = new ArrayList<>();
         String line = br.readLine();
         while (line != null) {
             List<Instruction> inner = new ArrayList<>();
@@ -44,81 +41,129 @@ public class LobbyLayout {
                 }
             }
             instructions.add(inner);
+            lines.add(line);
             line = br.readLine();
         }
         System.out.println("Part One: " + partOne(instructions));
+        System.out.println("Part Two: " + partTwo(lines));
     }
 
-    private static int partTwo(List<List<Instruction>> instructions) {
-        Map<HexagonalTile, Boolean> tiles = getTileStateMap(instructions);
-        int steps = 0;
-        while (steps < 100) {
-            List<HexagonalTile> blackTiles = new ArrayList<>();
-            for (HexagonalTile tile : tiles.keySet()) {
-                if (!tile.toggled) {
-                    blackTiles.add(tile);
+    public static int partTwo(List<String> input) {
+        boolean[][] floor = new boolean[500][500];
+        int midX = floor.length / 2;
+        int midY = floor[0].length / 2;
+        for (String in : input) {
+            String coords = getCoordinates(in);
+            int x = Integer.parseInt(coords.split(",")[0]);
+            int y = Integer.parseInt(coords.split(",")[1]);
+            floor[midY + y][midX + x] = !floor[midY + y][midX + x];
+        }
+        for (int day = 1; day <= 100; day++) {
+            floor = updateFloor(floor);
+        }
+        int count = 0;
+        for (boolean[] booleans : floor) {
+            for (int c = 0; c < floor[0].length; c++) {
+                if (booleans[c]) {
+                    count++;
                 }
             }
-            Map<HexagonalTile, Boolean> copy = new HashMap<>();
-            Set<HexagonalTile> dupe = new HashSet<>();
-            for (HexagonalTile blackTile : blackTiles) {
-                copy.put(blackTile, true);
-
-            }
-            steps++;
         }
+        return count;
     }
 
-    private static Set<HexagonalTile> getNeigborBlackTiles(Map<String, HexagonalTile> map, HexagonalTile target) {
-        Set<String> coords = new HashSet<>();
-        coords.add((target.x + 1) + " " + (target.y - 1) + " " + (target.z));
-        coords.add((target.x) + " " + (target.y - 1) + " " + (target.z + 1));
-        coords.add((target.x - 1) + " " + (target.y) + " " + (target.z + 1));
-        coords.add((target.x - 1) + " " + (target.y + 1) + " " + (target.z));
-        coords.add((target.x) + " " + (target.y + 1) + " " + (target.z - 1));
-        coords.add((target.x + 1) + " " + (target.y) + " " + (target.z - 1));
-        Set<HexagonalTile> neigbors = new HashSet<>();
-        for (String key : coords) {
-            if (map.containsKey(key)) {
-                neigbors.add(map.get(key));
-            } else {
-                String[] keys = key.split(" ");
-                neigbors.add(new HexagonalTile(Integer.parseInt(keys[0]), Integer.parseInt(keys[1]), Integer.parseInt(keys[2])));
+    private static boolean[][] updateFloor(boolean[][] floor) {
+        boolean[][] copy = new boolean[floor.length][floor[0].length];
+        for (int r = 0; r < copy.length; r++) {
+            System.arraycopy(floor[r], 0, copy[r], 0, copy[0].length);
+        }
+        for (int r = 1; r <= floor.length - 2; r += 1) {
+            for (int c = (r % 2 == 0) ? 2 : 3; c <= floor[0].length - 3; c += 2) {
+                int count = 0;
+                if (floor[r - 1][c - 1])
+                    count++;
+                if (floor[r - 1][c + 1])
+                    count++;
+                if (floor[r][c - 2])
+                    count++;
+                if (floor[r][c + 2])
+                    count++;
+                if (floor[r + 1][c - 1])
+                    count++;
+                if (floor[r + 1][c + 1])
+                    count++;
+                if (floor[r][c] && (count == 0 || count > 2))
+                    copy[r][c] = false;
+                if (!floor[r][c] && count == 2)
+                    copy[r][c] = true;
             }
         }
-        return neigbors;
+        return copy;
+    }
+
+    private static String getCoordinates(String in) {
+        int i = 0;
+        String dir;
+        int x = 0;
+        int y = 0;
+        while (i < in.length()) {
+            if (in.substring(i, i + 1).matches("[ew]")) {
+                dir = (in.substring(i, i + 1));
+                i++;
+            } else {
+                dir = (in.substring(i, i + 2));
+                i += 2;
+            }
+            switch (dir) {
+                case "e":
+                    x += 2;
+                    break;
+                case "w":
+                    x -= 2;
+                    break;
+                case "ne":
+                    y -= 1;
+                    x += 1;
+                    break;
+                case "nw":
+                    y -= 1;
+                    x -= 1;
+                    break;
+                case "se":
+                    y += 1;
+                    x += 1;
+                    break;
+                case "sw":
+                    y += 1;
+                    x -= 1;
+                    break;
+            }
+
+        }
+        return x + "," + y;
     }
 
     private static int partOne(List<List<Instruction>> instructions) {
         // See: https://www.redblobgames.com/grids/hexagons/#coordinates
         // Cube Coordinates Implementation
-        Map<String, HexagonalTile> tiles = getFlippedTiles(instructions);
+        Map<String, Boolean> tiles = getFlippedTiles(instructions);
         int count = 0;
-        for (HexagonalTile tile : tiles.values()) {
-            count += !tile.toggled ? 1 : 0;
+        for (boolean tile : tiles.values()) {
+            count += !tile ? 1 : 0;
         }
         return count;
     }
 
-    private static Map<HexagonalTile, Boolean> getTileStateMap(List<List<Instruction>> instructions) {
-        Map<String, HexagonalTile> tiles = getFlippedTiles(instructions);
-        Map<HexagonalTile, Boolean> state = new HashMap<>();
-        for (HexagonalTile tile : tiles.values()) {
-            state.put(tile, tile.toggled);
-        }
-        return state;
-    }
-
-    private static Map<String, HexagonalTile> getFlippedTiles(List<List<Instruction>> instructions) {
-        Map<String, HexagonalTile> tiles = new HashMap<>();
-        tiles.put("0 0 0", new HexagonalTile(0, 0, 0));
+    private static Map<String, Boolean> getFlippedTiles(List<List<Instruction>> instructions) {
+        Map<String, Boolean> tiles = new HashMap<>();
+        tiles.put("0 0 0", true);
         for (List<Instruction> instructionsList : instructions) {
             int currentX = 0;
             int currentY = 0;
             int currentZ = 0;
             String key = "";
-            for (int i = 0; i < instructionsList.size(); i++) {
-                switch (instructionsList.get(i)) {
+            for (Instruction instruction : instructionsList) {
+                switch (instruction) {
                     case E:
                         currentX++;
                         currentY--;
@@ -146,30 +191,16 @@ public class LobbyLayout {
                 }
                 key = currentX + " " + currentY + " " + currentZ;
                 if (!tiles.containsKey(key)) {
-                    HexagonalTile tile = new HexagonalTile(currentX, currentY, currentZ);
-                    tiles.put(key, tile);
+                    tiles.put(key, true);
                 }
             }
-            tiles.get(key).toggled ^= true;
+            tiles.replace(key, !tiles.get(key));
         }
         return tiles;
     }
 
-    private static class HexagonalTile {
-        private boolean toggled;
-        private final int x;
-        private final int y;
-        private final int z;
-        public HexagonalTile(int x, int y, int z) {
-            this.toggled = true;
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-    }
-
     private enum Instruction {
-        E, SE, SW, W, NW, NE
+        E(), SE(), SW(), W(), NW(), NE()
     }
 
 }
