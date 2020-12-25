@@ -48,17 +48,18 @@ public class LobbyLayout {
         System.out.println("Part Two: " + partTwo(lines));
     }
 
+    // Angry Coding BE WARNED
     public static int partTwo(List<String> input) {
         boolean[][] floor = new boolean[500][500];
-        int midX = floor.length / 2;
-        int midY = floor[0].length / 2;
+        int xMid = floor.length / 2;
+        int yMid = floor[0].length / 2;
         for (String in : input) {
             String coords = getCoordinates(in);
             int x = Integer.parseInt(coords.split(",")[0]);
             int y = Integer.parseInt(coords.split(",")[1]);
-            floor[midY + y][midX + x] = !floor[midY + y][midX + x];
+            floor[yMid + y][xMid + x] = !floor[yMid + y][xMid + x];
         }
-        for (int day = 1; day <= 100; day++) {
+        for (int i = 0; i < 100; i++) {
             floor = updateFloor(floor);
         }
         int count = 0;
@@ -80,30 +81,38 @@ public class LobbyLayout {
         for (int r = 1; r <= floor.length - 2; r += 1) {
             for (int c = (r % 2 == 0) ? 2 : 3; c <= floor[0].length - 3; c += 2) {
                 int count = 0;
-                if (floor[r - 1][c - 1])
+                if (floor[r - 1][c - 1]) {
                     count++;
-                if (floor[r - 1][c + 1])
+                }
+                if (floor[r - 1][c + 1]) {
                     count++;
-                if (floor[r][c - 2])
+                }
+                if (floor[r][c - 2]) {
                     count++;
-                if (floor[r][c + 2])
+                }
+                if (floor[r][c + 2]) {
                     count++;
-                if (floor[r + 1][c - 1])
+                }
+                if (floor[r + 1][c - 1]) {
                     count++;
-                if (floor[r + 1][c + 1])
+                }
+                if (floor[r + 1][c + 1]) {
                     count++;
-                if (floor[r][c] && (count == 0 || count > 2))
+                }
+                if (floor[r][c] && (count == 0 || count > 2)) {
                     copy[r][c] = false;
-                if (!floor[r][c] && count == 2)
+                }
+                if (!floor[r][c] && count == 2) {
                     copy[r][c] = true;
+                }
             }
         }
         return copy;
     }
 
     private static String getCoordinates(String in) {
-        int i = 0;
         String dir;
+        int i = 0;
         int x = 0;
         int y = 0;
         while (i < in.length()) {

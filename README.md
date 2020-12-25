@@ -29,6 +29,7 @@
 | #21     | [Allergen Assessment](https://adventofcode.com/2020/day/21)     | [Part One Solution](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/AllergenAssessment.java) |                                                                       |
 | #22     | [Crab Combat](https://adventofcode.com/2020/day/22)             | [Solution Code](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/CrabCombat.java)             |                                                                       |
 | #23     | [Crab Cups](https://adventofcode.com/2020/day/23)               | [Solution Code](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/CrabCups.java)               |                                                                       |
+| #24     | [Lobby Layout](https://adventofcode.com/2020/day/24)            | [Solution Code](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/LobbyLayout.java)            |                                                                       |
 
 **Run ALL Solutions [Beta]**
 [Run All Solutions](https://github.com/PulseBeat02/Advent-of-Code-2020/blob/master/src/main/java/com/github/pulsebeat02/common/RunSolutions.java)
